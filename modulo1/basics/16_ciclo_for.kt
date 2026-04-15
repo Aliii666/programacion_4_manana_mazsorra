@@ -1,61 +1,69 @@
 fun main() {
-    println("Controles de flujo interaciones, ciclos repetitivos - clico for")
-    println("For con rango")
-    for (i in 1..5) {
-        println("Multiplicacion del 5: ${5 * i}")
+    println("Controles de Flujo Iteraciones, Ciclos repetitivos - Ciclo For")
+    print("For con rango")
+    for( i in 1..10){
+        println(" 5 x $i  = ${5*i}")
     }
-
+    
     println("For con until")
-    for (i in 1 until 6) {
+    for(i in 1 until 5){
         println(i)
     }
-
+    
     println("For con pasos")
-    for (i in 0..10 step 2) {
+    for (i in 1..10 step 3){
         println(i)
     }
-
-    println("For desendente")
-    for (i in 5 downTo 1) {
+    
+    println("For descendente")
+    for( i in 10 downTo 1){
         println(i)
     }
-
+    
     println("For con listas")
-    val nombres = listOf("Juan", "María", "Pedro", "Ana", "Luis")
-    for (nombre in nombres) {
+    val nombres = listOf("Juan", "Maria", "Jose")
+    for(nombre in nombres){
         println(nombre)
     }
-
-    println("For con listas index valor")
-    for ((index, valor) in nombres.withIndex()) {
-        println("$index -> $valor")
+    
+    println("For con listas invex valor")
+    for((valor, index) in nombres.withIndex()){
+        println("$index->$valor")
     }
-
+    
     println("For con break")
-    for (i in 1..10) {
-        if (i == 5) {
-            break
+    for ( i in 1..10){
+        if(1==5){
+            break;
         }
-        println(i)
     }
-
+    
     println("For con continue")
-    for (i in 1..10) {
-        if (i == 3) continue;
-        if (i == 7) break;
-        println(i)
+    for( i in 1..10){
+        if(i==3){
+            continue;
+        }
+        println("item: $i")
     }
-
+    
+    println("For con continue")
+    for( i in 1..10){
+     if(i==3) continue;
+     if(i==7) break;
+     println("item $i")
+    }
+    
     val pacientes = listOf(
-        triple("Garcia, M", 37.2, 98),
-        triple("Perez, J", 39.1, 94),
-        triple("Lopez, A", 40.3, 91)
+    Triple("Garcia, M", 37.2, 98),
+    Triple("Zambrano, L", 39.1, 94),
+    Triple("Torres. R", 40.3, 91),
     )
-
-    for ((posicion, paciente) in pacientes.withIndex()) {
+    for ((posicion, paciente) in pacientes.withIndex()){
         val (nombre, temperatura, spo2) = paciente
         val alertaTemp = if(temperatura >= 38.0) "Fiebre" else "Normal"
-        val alertaSpo2 = if(spo2 < 95) "Bajo" else "Normal"
-        println("cama $posicion - $nombre - Temp: $temperatura Gdo.Cent.$alertaTemp - SpO2: $spo2 ($alertaSpo2)")
+        val alertaSpo2 = if(spo2 < 95.0) "Baja" else "Normal"
+        println("Cama $posicion - $nombre - Temp: $temperatura Gdo.Cent. $alertaTemp - Spo2: $spo2 $alertaSpo2")
     }
 }
+
+
