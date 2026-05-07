@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Paso01_TextFieldScreen() {
+fun Paso01TextFieldScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -207,6 +207,6 @@ private fun DemoFormularioContacto() {
 
 @Preview(showBackground = true)
 @Composable
-fun Paso01_Preview() {
-    MaterialTheme { Paso01_TextFieldScreen() }
+fun Paso01Preview() {
+    MaterialTheme { Paso01TextFieldScreen() }
 }

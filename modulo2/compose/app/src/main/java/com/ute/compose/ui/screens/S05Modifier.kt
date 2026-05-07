@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun S05_ModifierScreen() {
+fun S05ModifierScreen() {
     var ultimoClick by remember { mutableStateOf("Toca algún elemento") }
 
     Column(
@@ -58,7 +58,8 @@ fun S05_ModifierScreen() {
                 .size(130.dp)
                 .background(Color(0xFFFFCDD2))    // 1° pinta (sin recorte aún)
                 .clip(RoundedCornerShape(16.dp))  // 2° recorta — tarde para el fondo
-                .padding(12.dp),
+                .padding(12.dp)
+                .clickable { ultimoClick = "Click en Box ❌" },
             contentAlignment = Alignment.Center
         ) {
             Text("background\nantes de\nclip ❌",
@@ -105,5 +106,5 @@ fun S05_ModifierScreen() {
 @Preview(showBackground = true)
 @Composable
 fun S05_Preview() {
-    MaterialTheme { S05_ModifierScreen() }
+    MaterialTheme { S05ModifierScreen() }
 }

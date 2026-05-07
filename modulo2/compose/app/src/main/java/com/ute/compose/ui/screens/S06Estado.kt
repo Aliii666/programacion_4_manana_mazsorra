@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun S06_EstadoScreen() {
+fun S06EstadoScreen() {
     Column(
         modifier            = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -117,6 +117,6 @@ private fun DemoEstadoDerivado() {
 
 @Preview(showBackground = true)
 @Composable
-fun S06_Preview() {
-    MaterialTheme { S06_EstadoScreen() }
+fun S06Preview() {
+    MaterialTheme { S06EstadoScreen() }
 }

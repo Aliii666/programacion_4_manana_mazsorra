@@ -1,5 +1,4 @@
 package com.ute.compose.ui.screens
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun S07_StateHoistingScreen() {
+fun S07StateHoistingScreen() {
     Column(
         modifier            = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -82,7 +81,7 @@ private fun DemoEstadoElevado() {
         )
 
         // El padre pasa el valor actual y un callback
-        // El hijo es "tonto" — no decide qué hacer con el click
+        // El hijo es "tonto" — no decide qué hacer con el clic
         SelectorOpciones(
             opciones   = opciones,
             seleccion  = seleccion,
@@ -152,6 +151,6 @@ private fun SelectorOpciones(
 
 @Preview(showBackground = true)
 @Composable
-fun S07_Preview() {
-    MaterialTheme { S07_StateHoistingScreen() }
+fun S07Preview() {
+    MaterialTheme { S07StateHoistingScreen() }
 }

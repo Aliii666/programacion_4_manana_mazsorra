@@ -1,4 +1,3 @@
-// ui/S01_Saludo.kt
 package com.ute.compose.ui.screens
 
 import androidx.compose.foundation.layout.*

@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun S08_BienvenidaScreen() {
+fun S08BienvenidaScreen() {
     // Estado elevado a la pantalla completa
     var paso by remember { mutableStateOf(1) }  // 1, 2 o 3
 
@@ -223,6 +223,6 @@ private fun IndicadorPasos(pasoActual: Int, totalPasos: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun S08_Preview() {
-    MaterialTheme { S08_BienvenidaScreen() }
+fun S08Preview() {
+    MaterialTheme { S08BienvenidaScreen() }
 }

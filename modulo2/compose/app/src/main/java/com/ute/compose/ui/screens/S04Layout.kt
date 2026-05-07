@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun S04_LayoutScreen() {
+fun S04LayoutScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -110,6 +110,6 @@ private fun CeldaLayout(label: String, color: Color) {
 
 @Preview(showBackground = true)
 @Composable
-fun S04_Preview() {
-    MaterialTheme { S04_LayoutScreen() }
+fun S04Preview() {
+    MaterialTheme { S04LayoutScreen() }
 }
