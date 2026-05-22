@@ -19,7 +19,27 @@ void main() {
   String? ciudad;
   String display = ciudad != null ? ciudad.toUpperCase() : 'Sin ciudad';
 
-  // Forma más concisa con Elvis
+  // Forma más concisa con ??
   String display2 = ciudad?.toUpperCase() ?? 'Sin ciudad';
   print(display2);  // Sin ciudad
 }
+
+void main() {
+  String? nombre;
+
+  // Sin verificar — error de compilación
+  // print(nombre.length);  // ERROR: nombre puede ser null
+
+  // Forma 1 — verificación explícita
+  if (nombre != null) {
+    print(nombre.length);  // aquí Dart sabe que nombre es String
+  }
+
+  // Forma 2 — operador ?.
+  print(nombre?.length);  // null, sin excepción
+
+  // Forma 3 — valor por defecto
+  int longitud = nombre?.length ?? 0;
+  print(longitud);  // 0
+}
+

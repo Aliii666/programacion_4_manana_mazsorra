@@ -32,25 +32,6 @@ Mayor:  ${edad >= 18 ? 'Sí' : 'No'}
   print('Flutter'.substring(0, 4));         // Flut
   print('Flutter'.startsWith('Flu'));       // true
   print('abc'.padLeft(5, '0'));             // 00abc
-  print('abc'.padRight(5, '0'));            // abc00
-
 }
 
-void main() {
-  String? nombre;
-
-  // Sin verificar — error de compilación
-  // print(nombre.length);  // ERROR: nombre puede ser null
-
-  // Forma 1 — verificación explícita
-  if (nombre != null) {
-    print(nombre.length);  // aquí Dart sabe que nombre es String
-  }
-
-  // Forma 2 — operador ?.
-  print(nombre?.length);  // null, sin excepción
-
-  // Forma 3 — valor por defecto
-  int longitud = nombre?.length ?? 0;
-  print(longitud);  // 0
-}
+no amor tranquila chi 

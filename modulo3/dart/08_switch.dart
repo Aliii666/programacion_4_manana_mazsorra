@@ -17,8 +17,6 @@ void main() {
     default:
       print('Código desconocido');
   }
-
-  // Switch expresión — asigna el resultado a una variable
   String codigoHttp = '404';
 
   String descripcion = switch (codigoHttp) {
@@ -33,8 +31,7 @@ void main() {
     '503' => 'Service Unavailable',
     _     => 'Código HTTP desconocido',  // _ es el caso por defecto
   };
-
-  print(descripcion);  // Not Found — recurso no existe
+  print(descripcion);
 
   int codigoNumerico = 404;
 
@@ -60,25 +57,5 @@ void main() {
     _                       => '🔵 HIPOTERMIA — abrígese',
   };
 
-  print(alerta);  // 🔴 FIEBRE ALTA — consulte médico
-
-  // switch puede verificar el TIPO del valor
-  Object respuestaApi = {'id': 1, 'nombre': 'Teclado', 'precio': 89.99};
-
-  String resultado = switch (respuestaApi) {
-    Map<String, dynamic> m when m.containsKey('error') =>
-        'Error: ${m['error']}',
-    Map<String, dynamic> m =>
-        'Producto: ${m['nombre']} — \$${m['precio']}',
-    List<dynamic> lista =>
-        '${lista.length} elementos en la lista',
-    String texto =>
-        'Texto recibido: $texto',
-    _ =>
-        'Respuesta desconocida',
-  };
-
-  print(resultado);  // Producto: Teclado — $89.99
+  print(alerta);
 }
-
-

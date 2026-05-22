@@ -24,17 +24,4 @@ void main() {
   // const ahora = DateTime.now(); // ERROR — DateTime.now() no es constante de compilación
 
   print('$nombre $apellido tiene $edad años en $ciudad');
-  
-  // var — mutable, tipo inferido
-var contador = 0;
-contador = 1;          // OK
-
-// final — inmutable referencia, evaluado en runtime
-final lista = [1, 2, 3];
-lista.add(4);          // OK — la referencia es final, no el contenido
-// lista = [5, 6];     // ERROR — no se puede reasignar la referencia
-
-// const — inmutable profundo, evaluado en compilación
-const colores = ['rojo', 'azul'];
-// colores.add('verde'); // ERROR — lista const es completamente inmutable
 }
