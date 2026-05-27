@@ -1,4 +1,5 @@
-package com.shopappi.domain.model
+package com.shopapp.domain.model
+
 
 data class AuthTokens(
     val access: String,

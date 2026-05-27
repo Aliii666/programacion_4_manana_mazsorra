@@ -1,4 +1,4 @@
-package com.shopappi
+package com.shopapp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,19 +25,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shopappi.theme.Accent
-import com.shopappi.theme.Background
-import com.shopappi.theme.Border
-import com.shopappi.theme.BorderLight
-import com.shopappi.theme.Error
-import com.shopappi.theme.Info
-import com.shopappi.theme.ShopAppTheme
-import com.shopappi.theme.Success
-import com.shopappi.theme.Surface
-import com.shopappi.theme.TextFaint
-import com.shopappi.theme.TextPrimary
-import com.shopappi.theme.TextSecondary
-import com.shopappi.theme.Warning
+import com.shopapp.theme.Accent
+import com.shopapp.theme.Background
+import com.shopapp.theme.Border
+import com.shopapp.theme.BorderLight
+import com.shopapp.theme.Error
+import com.shopapp.theme.Info
+import com.shopapp.theme.ShopAppTheme
+import com.shopapp.theme.Success
+import com.shopapp.theme.Surface
+import com.shopapp.theme.TextFaint
+import com.shopapp.theme.TextPrimary
+import com.shopapp.theme.TextSecondary
+import com.shopapp.theme.Warning
 
 @Composable
 fun VerificationScreen() {

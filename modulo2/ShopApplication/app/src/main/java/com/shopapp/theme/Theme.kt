@@ -1,4 +1,4 @@
-package com.shopappi.theme
+package com.shopapp.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
