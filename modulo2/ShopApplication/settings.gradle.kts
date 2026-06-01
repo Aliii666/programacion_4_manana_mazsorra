@@ -13,6 +13,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
-rootProject.name = "ShopApp"
+rootProject.name = "ShopApplication"
 include(":app")
+ 
