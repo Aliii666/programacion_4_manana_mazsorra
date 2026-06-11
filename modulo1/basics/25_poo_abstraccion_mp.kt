@@ -1,43 +1,41 @@
-class BahiaTaller(mecanico: String, capacidadInicial: Double) {
+// El usuario de esta clase solo sabe QUÉ puede hacer con un Servicio
+// No necesita saber cómo se calcula precioConIva ni cómo funciona disponible
+class Servicio(
+    val id:           Int,
+    val nombre:       String,
+    val precioBase:   Double,
+    private val tecnicosDisponibles: Int   // privado — nadie asigna técnicos directamente
+) {
+    val precioConIva: Double               // interfaz pública — qué puede consultar el cliente
+        get() = precioBase * 1.19
 
-    val mecanico: String = mecanico         // publico — cualquiera puede leer
+    val disponible: Boolean
+        get() = tecnicosDisponibles > 0
 
-    private var capacidadDisponible: Double = capacidadInicial  // privado — solo esta clase lo modifica
+    val descripcionPrecio: String
+        get() = "Base: $${"%.2f".format(precioBase)} | Con IVA: $${"%.2f".format(precioConIva)}"
 
-    internal val codigoBahia: String =      // internal — visible en el mismo modulo
-        "BH${(100000..999999).random()}"
-
-    protected open fun calcularCostoServicio(): Double = capacidadDisponible * 0.02  // protected — visible en subclases
-
-    // La capacidad solo cambia a traves de estos metodos — NUNCA directamente
-    fun ingresarCarro(costo: Double) {
-        require(costo > 0) { "El costo debe ser positivo" }
-        capacidadDisponible += costo
-        println("Carro ingresado: $${"%.2f".format(costo)} | Capacidad actual: ${consultarCapacidad()}")
-    }
-
-    fun retirarCarro(costo: Double): Boolean {
-        require(costo > 0) { "El costo debe ser positivo" }
-        if (costo > capacidadDisponible) {
-            println("Capacidad insuficiente en la bahia")
-            return false
-        }
-        capacidadDisponible -= costo
-        println("Carro retirado: $${"%.2f".format(costo)} | Capacidad actual: ${consultarCapacidad()}")
-        return true
-    }
-
-    fun consultarCapacidad(): String = "${"%.2f".format(capacidadDisponible)} espacios"
+    override fun toString() = "[$id] $nombre ($${"%.2f".format(precioBase)} + IVA)"
 }
 
 fun main() {
-    val bahia = BahiaTaller("Aliyha", 1000.0)
+    val cambioAceite = Servicio(1, "Cambio de aceite", 35.00, 3)
+    val alineacion   = Servicio(2, "Alineación y balanceo", 50.00, 1)
+    val reparacionMotor = Servicio(3, "Reparación de motor", 320.00, 0)
 
-    bahia.ingresarCarro(500.0)
-    bahia.retirarCarro(200.0)
-    bahia.retirarCarro(2000.0)
+    println("=== TALLER MECÁNICO — SERVICIOS DISPONIBLES ===\n")
 
-    println(bahia.mecanico)
-    println(bahia.consultarCapacidad())
-    // bahia.capacidadDisponible = 999999.0  // ERROR — capacidadDisponible es privado
+    val servicios = listOf(cambioAceite, alineacion, reparacionMotor)
+
+    for (servicio in servicios) {
+        println(servicio)
+        println("  Disponible     : ${if (servicio.disponible) "✓ Sí" else "✗ No hay técnicos"}")
+        println("  ${servicio.descripcionPrecio}")
+        println()
+    }
+
+    // El código externo usa solo la interfaz pública
+    println("Precio con IVA del cambio de aceite: ${"%.2f".format(cambioAceite.precioConIva)}")
+
+    // cambioAceite.tecnicosDisponibles = 0  // ERROR — privado, protegido por diseño
 }

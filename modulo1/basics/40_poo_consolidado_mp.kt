@@ -1,74 +1,71 @@
-// ABSTRACCION: sealed class define los tipos posibles de aviso al cliente
-sealed class AvisoTaller(val titulo: String, val mensaje: String) {
-    abstract fun formatear(): String  // cada tipo formatea de forma distinta
+sealed class AlertaTaller(val titulo: String, val mensaje: String) {
+    abstract fun formatear(): String
 
     data class Email(
         val destinatario: String,
         val asunto:       String,
         val cuerpo:       String
-    ) : AvisoTaller(asunto, cuerpo) {
+    ) : AlertaTaller(asunto, cuerpo) {
         override fun formatear() =
-            "📧 Email -> $destinatario\n   Asunto: $titulo\n   ${mensaje.take(50)}..."
+            "📧 Email → $destinatario\n   Asunto: $titulo\n   ${mensaje.take(50)}..."
     }
 
-    data class Whatsapp(val dispositivo: String, val icono: String = "🔔")
-        : AvisoTaller("Whatsapp", "") {
-        override fun formatear() = "$icono Whatsapp -> $dispositivo: $titulo"
+    data class Whatsapp(val telefono: String, val icono: String = "🔔")
+        : AlertaTaller("WhatsApp", "") {
+        override fun formatear() = "$icono Whatsapp → $telefono: $titulo"
     }
 
     data class Sms(val telefono: String, val texto: String)
-        : AvisoTaller("SMS", texto) {
-        override fun formatear() = "📱 SMS -> $telefono: ${texto.take(160)}"
+        : AlertaTaller("SMS", texto) {
+        override fun formatear() = "📱 SMS → $telefono: ${texto.take(160)}"
     }
 
-    object Silencioso : AvisoTaller("", "") {
-        override fun formatear() = "🔕 Aviso silencioso"
+    object Silenciosa : AlertaTaller("", "") {
+        override fun formatear() = "🔕 Alerta silenciosa"
     }
 }
 
-// ABSTRACCION + POLIMORFISMO: interfaz con contrato generico
-interface EnviadorAviso {
+interface EnviadorAlerta {
     val nombre: String
-    fun enviar(aviso: AvisoTaller): Boolean
+    fun enviar(alerta: AlertaTaller): Boolean
 }
 
-// HERENCIA: implementaciones concretas del mismo contrato
-class ServicioEmail : EnviadorAviso {
+class ServicioEmail : EnviadorAlerta {
     override val nombre = "Email"
-    override fun enviar(a: AvisoTaller): Boolean {
-        if (a !is AvisoTaller.Email) return false
-        println("  [EMAIL] -> ${a.destinatario}")
+    override fun enviar(a: AlertaTaller): Boolean {
+        if (a !is AlertaTaller.Email) return false
+        println("  [EMAIL] → ${a.destinatario}")
         return true
     }
 }
 
-class ServicioWhatsapp : EnviadorAviso {
-    override val nombre = "Whatsapp"
-    override fun enviar(a: AvisoTaller): Boolean {
-        if (a !is AvisoTaller.Whatsapp) return false
-        println("  [WHATSAPP] -> ${a.dispositivo}")
+class ServicioWhatsapp : EnviadorAlerta {
+    override val nombre = "WhatsApp"
+    override fun enviar(a: AlertaTaller): Boolean {
+        if (a !is AlertaTaller.Whatsapp) return false
+        println("  [WHATSAPP] → ${a.telefono}")
         return true
     }
 }
 
-// ENCAPSULAMIENTO: la lista de servicios es privada
-class CentralAvisos(private val servicios: List<EnviadorAviso>) {
-
-    fun enviar(aviso: AvisoTaller) {
-        println(aviso.formatear())  // POLIMORFISMO: cada tipo formatea distinto
-        val exito = servicios.any { it.enviar(aviso) }
+class Dispatcher(private val servicios: List<EnviadorAlerta>) {
+    fun enviar(alerta: AlertaTaller) {
+        println(alerta.formatear())
+        val exito = servicios.any { it.enviar(alerta) }
         if (!exito) println("  ⚠️ Sin servicio disponible")
         println()
     }
 }
 
 fun main() {
-    val central = CentralAvisos(listOf(ServicioEmail(), ServicioWhatsapp()))
+    System.setOut(java.io.PrintStream(System.out, true, "UTF-8"))
+
+    val dispatcher = Dispatcher(listOf(ServicioEmail(), ServicioWhatsapp()))
 
     listOf(
-        AvisoTaller.Email("aliyha@taller.com", "Vehiculo listo", "Su auto ya puede ser retirado."),
-        AvisoTaller.Whatsapp("iPhone-Aliyha"),
-        AvisoTaller.Sms("+5930912345678", "Su turno es a las 10:00"),
-        AvisoTaller.Silencioso
-    ).forEach { central.enviar(it) }
+        AlertaTaller.Email("carlos@taller.com", "Vehiculo listo", "Su Toyota Corolla ABC-1234 ya esta listo para retirar."),
+        AlertaTaller.Whatsapp("+5930991234567"),
+        AlertaTaller.Sms("+5930991234567", "Su vehiculo esta listo. Pase por el taller."),
+        AlertaTaller.Silenciosa
+    ).forEach { dispatcher.enviar(it) }
 }

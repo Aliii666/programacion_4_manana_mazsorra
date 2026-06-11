@@ -1,21 +1,43 @@
-class ClienteTaller(val nombre: String, val email: String) {
-    val nombreNormalizado: String
-    val dominioEmail: String
+class Vehiculo(val placa: String, val propietario: String) {
+    val placaNormalizada: String
+    val marcaPropietario: String
 
     init {
-        // Encapsulamiento en accion: validamos antes de construir
-        require(nombre.isNotBlank()) { "El nombre no puede estar vacio" }
-        require(email.contains("@")) { "Email invalido: $email" }
+        // Validamos antes de registrar el vehículo
+        require(placa.isNotBlank())      { "La placa no puede estar vacía" }
+        require(propietario.isNotBlank()) { "El nombre del propietario no puede estar vacío" }
+        require(placa.length >= 6)        { "Placa inválida: $placa" }
 
-        nombreNormalizado = nombre.trim().lowercase()
-        dominioEmail      = email.substringAfter("@")
+        placaNormalizada  = placa.trim().uppercase()
+        marcaPropietario  = propietario.trim().lowercase()
     }
 }
 
 fun main() {
-    val cliente = ClienteTaller("  Aliyha  ", "aliyha@taller.com")
-    println(cliente.nombreNormalizado)  // aliyha
-    println(cliente.dominioEmail)       // taller.com
+    System.setOut(java.io.PrintStream(System.out, true, "UTF-8"))
 
-    // ClienteTaller("", "invalido")   // IllegalArgumentException — require falla
+    val v = Vehiculo("  abc-1234  ", "  Carlos Ramírez  ")
+    println("Placa normalizada  : ${v.placaNormalizada}")   // ABC-1234
+    println("Propietario        : ${v.marcaPropietario}")   // carlos ramírez
+
+    println()
+
+    // Casos que lanzan excepción — el init protege el objeto
+    try {
+        Vehiculo("", "Carlos Ramírez")          // placa vacía
+    } catch (e: IllegalArgumentException) {
+        println("Error: ${e.message}")
+    }
+
+    try {
+        Vehiculo("AB", "Carlos Ramírez")        // placa muy corta
+    } catch (e: IllegalArgumentException) {
+        println("Error: ${e.message}")
+    }
+
+    try {
+        Vehiculo("ABC-1234", "")                // propietario vacío
+    } catch (e: IllegalArgumentException) {
+        println("Error: ${e.message}")
+    }
 }

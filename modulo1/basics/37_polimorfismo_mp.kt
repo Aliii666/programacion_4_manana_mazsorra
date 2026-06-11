@@ -1,41 +1,66 @@
-// La interfaz define el contrato — QUE puede hacer
-// Las implementaciones definen el COMO
-interface Reparable {
-    fun ejecutarServicio(horas: Double): Boolean
+// La interfaz define el contrato — QUÉ puede hacer
+interface MetodoPago {
+    fun procesar(monto: Double): Boolean
     val nombre: String
 }
 
-class MecanicaGeneral(val tecnico: String) : Reparable {
-    override val nombre = "Mecanica General"
-    override fun ejecutarServicio(horas: Double): Boolean {
-        println("🔧 Realizando reparacion general por ${"%.2f".format(horas)} hrs — Tecnico: $tecnico")
+class TarjetaCredito(private val numero: String) : MetodoPago {
+    override val nombre = "Tarjeta de crédito"
+
+    override fun procesar(monto: Double): Boolean {
+        println("💳 Cargando $${"%.2f".format(monto)} a $numero")
         return true
     }
 }
 
-class Electricidad(val modulo: String) : Reparable {
-    override val nombre = "Electricidad"
-    override fun ejecutarServicio(horas: Double): Boolean {
-        println("⚡ Diagnosticando sistema electrico $modulo por ${"%.2f".format(horas)} hrs")
+class Transferencia(private val cuentaDestino: String) : MetodoPago {
+    override val nombre = "Transferencia bancaria"
+
+    override fun procesar(monto: Double): Boolean {
+        println("🏦 Transfiriendo $${"%.2f".format(monto)} a la cuenta $cuentaDestino")
         return true
     }
 }
 
-class Alineacion : Reparable {
-    override val nombre = "Alineacion y Balanceo"
-    override fun ejecutarServicio(horas: Double): Boolean {
-        println("🔩 Ajustando alineacion y balanceo en ${"%.2f".format(horas)} hrs")
+class Efectivo : MetodoPago {
+    override val nombre = "Efectivo"
+
+    override fun procesar(monto: Double): Boolean {
+        println("💵 Recibiendo $${"%.2f".format(monto)} en efectivo")
         return true
     }
 }
 
-// Esta funcion no sabe ni le importa que tipo de servicio es
-// Solo sabe que recibe algo que implementa Reparable — POLIMORFISMO
-fun atenderVehiculo(horas: Double, servicio: Reparable) {
-    println("Iniciando servicio: ${servicio.nombre}...")
-    val exito = servicio.ejecutarServicio(horas)
-    println(if (exito) "✅ Servicio completado" else "❌ Servicio fallido")
+class Cheque(private val numeroCheque: String) : MetodoPago {
+    override val nombre = "Cheque"
+
+    override fun procesar(monto: Double): Boolean {
+        println("📝 Procesando cheque N° $numeroCheque por $${"%.2f".format(monto)}")
+        return true
+    }
+}
+
+// Función polimórfica — cobra el servicio sin importar el método de pago
+fun cobrarServicio(monto: Double, metodoPago: MetodoPago) {
+    println("Procesando pago con ${metodoPago.nombre}...")
+    val exito = metodoPago.procesar(monto)
+    println(if (exito) "✅ Pago exitoso" else "❌ Pago fallido")
+    println()
 }
 
 fun main() {
-    val servicios: List<Reparable> = listOf(
+    System.setOut(java.io.PrintStream(System.out, true, "UTF-8"))
+
+    val metodos: List<MetodoPago> = listOf(
+        TarjetaCredito("**** **** **** 1234"),
+        Transferencia("ES76-0081-0166-2300"),
+        Efectivo(),
+        Cheque("1289")
+    )
+
+    metodos.forEach { cobrarServicio(99.99, it) }
+
+    for (pago in metodos) {
+        println("Método de pago: ${pago.nombre}")
+    }
+}

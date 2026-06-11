@@ -1,43 +1,50 @@
-class OrdenServicio(cliente: String, saldoInicial: Double) {
+open class OrdenServicio(cliente: String, anticipoInicial: Double) {
 
-    val cliente: String = cliente       // publico — cualquiera puede leer
+    val cliente: String = cliente
 
-    private var saldo: Double = saldoInicial  // privado — solo esta clase lo modifica
+    private var anticipo: Double = anticipoInicial
 
-    internal val numeroOrden: String =        // internal — visible en el mismo modulo
-        "OS${(100000..999999).random()}"
+    internal val numeroOrden: String =
+        "ORD-${(10000..99999).random()}"
 
-    protected open fun calcularDescuento(): Double = saldo * 0.02  // protected — visible en subclases
+    protected open fun calcularDescuento(): Double = anticipo * 0.05
 
-    // El saldo solo cambia a traves de estos metodos — NUNCA directamente
-    fun agregarServicio(monto: Double) {
+    fun agregarPago(monto: Double) {
         require(monto > 0) { "El monto debe ser positivo" }
-        saldo += monto
-        println("Servicio agregado: $${"%.2f".format(monto)} | Total a pagar: ${consultarSaldo()}")
+        anticipo += monto
+        println("Pago recibido: $${"%.2f".format(monto)} | Saldo a favor: ${consultarSaldo()}")
     }
 
-    fun aplicarPago(monto: Double): Boolean {
+    fun descontarServicio(monto: Double): Boolean {
         require(monto > 0) { "El monto debe ser positivo" }
-        if (monto > saldo) {
-            println("El pago supera el total de la orden")
+        if (monto > anticipo) {
+            println("Saldo insuficiente — el cliente debe un pago adicional")
             return false
         }
-        saldo -= monto
-        println("Pago aplicado: $${"%.2f".format(monto)} | Saldo restante: ${consultarSaldo()}")
+        anticipo -= monto
+        println("Servicio cobrado: $${"%.2f".format(monto)} | Saldo restante: ${consultarSaldo()}")
         return true
     }
 
-    fun consultarSaldo(): String = "$${"%.2f".format(saldo)}"
+    fun consultarSaldo(): String = "$${"%.2f".format(anticipo)}"
 }
 
 fun main() {
-    val orden = OrdenServicio("Aliyha", 1000.0)
+    System.setOut(java.io.PrintStream(System.out, true, "UTF-8"))
 
-    orden.agregarServicio(500.0)    // Servicio agregado: $500.00 | Total a pagar: $1500.00
-    orden.aplicarPago(200.0)        // Pago aplicado: $200.00 | Saldo restante: $1300.00
-    orden.aplicarPago(2000.0)       // El pago supera el total de la orden
+    val orden = OrdenServicio("Carlos Ramírez", 200.0)
 
-    println(orden.cliente)          // Aliyha — acceso publico permitido
-    println(orden.consultarSaldo()) // $1300.00
-    // orden.saldo = 999999.0       // ERROR — saldo es privado
+    println("=== TALLER MECÁNICO — ORDEN DE SERVICIO ===")
+    println("Cliente      : ${orden.cliente}")
+    println("Número orden : ${orden.numeroOrden}")
+    println()
+
+    orden.agregarPago(150.0)
+    orden.descontarServicio(80.0)
+    orden.descontarServicio(500.0)
+
+    println()
+    println("Cliente           : ${orden.cliente}")
+    println("Saldo disponible  : ${orden.consultarSaldo()}")
+    // orden.anticipo = 999999.0   // ERROR — privado
 }
