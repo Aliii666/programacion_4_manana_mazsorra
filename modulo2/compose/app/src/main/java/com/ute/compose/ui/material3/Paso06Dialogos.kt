@@ -424,6 +424,6 @@ private fun DialogNuevoContacto(
 
 @Preview(showBackground = true)
 @Composable
-fun Paso06_Preview() {
+fun Paso06Preview() {
     MaterialTheme { Paso06DialogosScreen() }
 }

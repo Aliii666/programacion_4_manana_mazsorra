@@ -21,11 +21,12 @@ import com.shopapp.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductFormSheet(
-    initial:    Product?,
-    categories: List<Category>,
-    formState:  ProductFormState,
-    onSave:     (ProductPayload) -> Unit,
-    onDismiss:  () -> Unit,
+    initial:        Product?,
+    categories:     List<Category>,
+    formState:      ProductFormState,
+    onSave:         (ProductPayload) -> Unit,
+    onDismiss:      () -> Unit,
+    onImageUpdated: () -> Unit = {},   // ← nuevo parámetro
 ) {
     val isEdit = initial != null
 
@@ -64,6 +65,18 @@ fun ProductFormSheet(
                 .navigationBarsPadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
+            if (isEdit && initial != null) {
+                ProductImageSection(
+                    productId = initial.id,
+                    currentImageUrl = initial.imageUrl,
+                    isStaff = true,         // solo staff llega hasta aquí
+                    onImageUpdated = onImageUpdated,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp),
+                )
+                Spacer(Modifier.height(8.dp))
+            }
             Text(
                 text       = if (isEdit) "Editar: ${initial?.name}" else "Nuevo producto",
                 style      = MaterialTheme.typography.titleLarge,

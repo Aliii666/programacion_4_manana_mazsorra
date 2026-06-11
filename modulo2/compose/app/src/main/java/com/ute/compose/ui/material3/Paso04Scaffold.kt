@@ -17,7 +17,7 @@ import com.ute.compose.model.contactosDeMuestra
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Paso04ScaffoldScreen() {
+fun Paso04_ScaffoldScreen() {
     var contactos  by remember { mutableStateOf(contactosDeMuestra) }
     var busqueda   by remember { mutableStateOf("") }
     var filtro     by remember { mutableStateOf("Todos") }
@@ -164,5 +164,5 @@ fun Paso04ScaffoldScreen() {
 @Preview(showBackground = true)
 @Composable
 fun Paso04_Preview() {
-    MaterialTheme { Paso04ScaffoldScreen() }
+    MaterialTheme { Paso04_ScaffoldScreen() }
 }

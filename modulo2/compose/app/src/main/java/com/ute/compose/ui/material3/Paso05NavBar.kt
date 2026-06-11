@@ -176,6 +176,6 @@ fun PantallaPerfilContent(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun Paso05_Preview() {
+fun Paso05Preview() {
     MaterialTheme { Paso05NavBarScreen() }
 }

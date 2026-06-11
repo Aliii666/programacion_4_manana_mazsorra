@@ -34,7 +34,7 @@ fun ProductsAdminScreen(
     val state      by viewModel.state.collectAsState()
     val filtered   by viewModel.filtered.collectAsState()
     val formState  by viewModel.formState.collectAsState()
-    val categories by viewModel.categories.collectAsState() // ← desde el ViewModel
+    val categories by viewModel.categories.collectAsState() // ← desde el ViewMode
 
     var showForm      by remember { mutableStateOf(false) }
     var editTarget    by remember { mutableStateOf<Product?>(null) }
@@ -198,6 +198,7 @@ fun ProductsAdminScreen(
                 editTarget = null
                 viewModel.resetFormState()
             },
+            onImageUpdated = { viewModel.load() },
         )
     }
 

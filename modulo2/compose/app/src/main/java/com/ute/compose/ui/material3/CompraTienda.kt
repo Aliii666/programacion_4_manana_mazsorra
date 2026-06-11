@@ -1,4 +1,3 @@
-
 package com.ute.compose.ui.material3
 
 import androidx.compose.foundation.layout.*
@@ -16,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CompraTiendaScreen() {
+fun Paso01TiendaScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,7 +23,7 @@ fun CompraTiendaScreen() {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Text("Calculo de Subtotal",
+        Text("Paso 1 · TextField y OutlinedTextField",
             style = MaterialTheme.typography.titleMedium)
         HorizontalDivider()
         SumaNumeros()
@@ -35,20 +34,24 @@ fun CompraTiendaScreen() {
 @Composable
 private fun SumaNumeros() {
     var nombre     by remember { mutableStateOf("") }
-    var numero1     by remember { mutableStateOf("") }
-    var numero2      by remember { mutableStateOf("") }
-    var resultadoF      by remember { mutableStateOf("") }
-    var descuentoF      by remember { mutableStateOf("") }
-    var totalAPagarF      by remember { mutableStateOf("") }
+    var cantidad      by remember { mutableStateOf("") }
+    var precioUnitario      by remember { mutableStateOf("") }
+    var subTotal      by remember { mutableStateOf("") }
+    var descuento      by remember { mutableStateOf("") }
+    var total      by remember { mutableStateOf("") }
+
+
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Compra de productos",
+        Text("compra de producto",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary)
+
+        // numero1 — validación básica de longitud
         OutlinedTextField(
             value           = nombre,
             onValueChange   = { nombre = it },
-            label           = { Text("Nombre del Producto") },
+            label           = { Text(" nombre") },
             leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             singleLine      = true,
@@ -57,9 +60,9 @@ private fun SumaNumeros() {
 
         // numero1 — validación básica de longitud
         OutlinedTextField(
-            value           = numero1,
-            onValueChange   = { numero1 = it },
-            label           = { Text("Cantidad") },
+            value           = cantidad,
+            onValueChange   = { cantidad = it },
+            label           = { Text("cantidad ") },
             leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             singleLine      = true,
@@ -68,9 +71,9 @@ private fun SumaNumeros() {
 
         // numero1 — validación básica de longitud
         OutlinedTextField(
-            value           = numero2,
-            onValueChange   = { numero2 = it },
-            label           = { Text("Precio ") },
+            value           = precioUnitario,
+            onValueChange   = { precioUnitario = it },
+            label           = { Text("precioUnitario ") },
             leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             singleLine      = true,
@@ -79,38 +82,42 @@ private fun SumaNumeros() {
 
 
         Button(
-            onClick  = { val numero1Int=numero1.toIntOrNull()?:0
-                         val numero2Int=numero2.toDoubleOrNull()?:0.0
-                 val resultado = (numero1Int * numero2Int)
-                var porcentaje = 0.0;
-                if (resultado>50){
-                    porcentaje = 0.1
-                } else if(resultado>20){
-                    porcentaje = 0.5
+            onClick  = {
+                val cantidadInt=cantidad.toIntOrNull()?:0
+                val precioUnitarioDouble=precioUnitario.toDoubleOrNull()?:0.0
+                val subTotalDouble = (cantidadInt * precioUnitarioDouble)
+                var porcentaje = 0.0
+                if(subTotalDouble > 50){
+                    porcentaje= 0.1
+                } else if (subTotalDouble >20 ){
+                    porcentaje = 0.05
                 }
 
-                var descuento = resultado - (resultado*porcentaje)
-                var totalAPagar = resultado - descuento
+                val totalDouble =  subTotalDouble - (subTotalDouble * porcentaje)
 
-                resultadoF = resultado.toString()
-                descuentoF = descuento.toString()
-                totalAPagarF = totalAPagar.toString()
-                       },
+
+                subTotal= subTotalDouble.toString()
+                descuento=porcentaje.toString()
+                total = totalDouble.toString()
+
+
+            },
 
             modifier = Modifier.fillMaxWidth()
         ) {
-           Text(text="Calcular")
-        }
-        Text(text="Nombre del Producto : $nombre")
-        Text(text="Subtotal a Pagar : $resultadoF")
-        Text(text="Descuento : $descuentoF")
-        Text(text="Total a Pagar : $totalAPagarF")
 
+            Text(text="calcular")
+        }
+
+        Text(text="nombre del producto: $nombre")
+        Text(text="subtotal  : $subTotal")
+        Text(text=" descuento : $descuento")
+        Text(text="total a pagar  : $total")
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CompraTiendaPreview() {
-    MaterialTheme { CompraTiendaScreen() }
+fun Paso01TiendaPreview() {
+    MaterialTheme { Paso01TiendaScreen()}
 }
