@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:name=".ShopApplication"
         android:usesCleartextTraffic="true"
@@ -16,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShopApplication">
 
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -26,9 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
         </activity>
-
 
     </application>
 </manifest>
+

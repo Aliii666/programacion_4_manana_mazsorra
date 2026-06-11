@@ -22,7 +22,6 @@ import com.shopapp.domain.model.OrderStatus
 import com.shopapp.presentation.components.ErrorScreen
 import com.shopapp.presentation.components.LoadingScreen
 import com.shopapp.presentation.components.StatusBadge
-
 import com.shopapp.presentation.viewmodel.OrderDetailUiState
 import com.shopapp.presentation.viewmodel.OrderDetailViewModel
 import com.shopapp.theme.*

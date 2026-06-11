@@ -19,4 +19,5 @@ interface ProductRepository {
     suspend fun getStats(): Result<Map<String, Any>>
 
     suspend fun uploadProductImage(id: Int, uri: Uri): Result<String>
+
 }

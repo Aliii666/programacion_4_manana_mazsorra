@@ -44,7 +44,4 @@ interface UserApi {
     suspend fun uploadAvatar(
         @Part avatar: MultipartBody.Part,
     ): Response<UserDto>
-
 }
-
-

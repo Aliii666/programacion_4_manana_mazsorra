@@ -34,7 +34,7 @@ fun ProductsAdminScreen(
     val state      by viewModel.state.collectAsState()
     val filtered   by viewModel.filtered.collectAsState()
     val formState  by viewModel.formState.collectAsState()
-    val categories by viewModel.categories.collectAsState() // ← desde el ViewMode
+    val categories by viewModel.categories.collectAsState() // ← desde el ViewModel
 
     var showForm      by remember { mutableStateOf(false) }
     var editTarget    by remember { mutableStateOf<Product?>(null) }

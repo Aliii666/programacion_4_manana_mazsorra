@@ -1,3 +1,4 @@
+// data/remote/api/ProductApi.kt
 package com.shopapp.data.remote.api
 
 import com.shopapp.data.remote.dto.*
@@ -37,7 +38,6 @@ interface ProductApi {
 
     @GET("products/stats/")
     suspend fun getStats(): Response<ProductStatsDto>
-
 
     @Multipart
     @PATCH("products/{id}/")

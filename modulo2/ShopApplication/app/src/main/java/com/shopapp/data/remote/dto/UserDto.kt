@@ -15,9 +15,9 @@ data class UserDto(
     @SerializedName("is_active")   val isActive:   Boolean,
     @SerializedName("date_joined") val dateJoined: String,
     @SerializedName("num_orders")  val numOrders:  Int,
-    @SerializedName("avatar_url")
-    val avatarUrl:  String? = null,    // ← nuevo campo
+    @SerializedName("avatar_url")  val avatarUrl:  String? = null,
 )
+
 data class UserRequestDto(
     val username:   String,
     val email:      String,

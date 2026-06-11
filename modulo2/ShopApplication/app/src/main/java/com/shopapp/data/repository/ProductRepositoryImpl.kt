@@ -1,3 +1,4 @@
+// data/repository/ProductRepositoryImpl.kt
 package com.shopapp.data.repository
 
 import com.shopapp.data.remote.api.ProductApi
@@ -12,10 +13,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import android.content.Context
 import android.net.Uri
+
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+
+
 @Singleton
 class ProductRepositoryImpl @Inject constructor(
     private val api: ProductApi,
@@ -85,6 +89,7 @@ class ProductRepositoryImpl @Inject constructor(
             )
         } else error("Error ${response.code()}")
     }
+
     override suspend fun uploadProductImage(id: Int, uri: Uri): Result<String> =
         runCatching {
             val part     = uri.toMultipart(context, fieldName = "image")
@@ -95,8 +100,8 @@ class ProductRepositoryImpl @Inject constructor(
                 error(response.errorBody()?.string() ?: "Error ${response.code()}")
             }
         }
-
 }
+
 internal fun Uri.toMultipart(context: Context, fieldName: String): MultipartBody.Part {
     val resolver    = context.contentResolver
     val mimeType    = resolver.getType(this) ?: "image/jpeg"
