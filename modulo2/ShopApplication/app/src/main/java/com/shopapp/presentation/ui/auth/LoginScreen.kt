@@ -151,3 +151,22 @@ fun LoginScreen(
         }
     }
 }
+
+
+@Composable
+fun LoginScreen(
+    onLoginSuccess:       (isStaff: Boolean) -> Unit,
+    onNavigateToRegister: () -> Unit,
+    onForgotPassword:     () -> Unit = {},   // ← nuevo parámetro
+    viewModel:            AuthViewModel = hiltViewModel(),
+) {
+    // ... código existente ...
+
+    // DENTRO del Column de formulario, después del Button de login:
+    TextButton(
+        onClick  = onForgotPassword,
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+    ) {
+        Text("¿Olvidaste tu contraseña?")
+    }
+}
