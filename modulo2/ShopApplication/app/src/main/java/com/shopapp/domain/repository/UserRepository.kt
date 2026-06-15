@@ -1,7 +1,6 @@
 // domain/repository/UserRepository.kt
 package com.shopapp.domain.repository
 
-import android.net.Uri
 import com.shopapp.domain.model.User
 import com.shopapp.domain.model.UserPayload
 
@@ -18,6 +17,17 @@ interface UserRepository {
     suspend fun deleteUser(id: Int): Result<Unit>
     suspend fun toggleActive(id: Int): Result<Boolean>
     suspend fun getStats(): Result<Map<String, Int>>
-    suspend fun uploadAvatar(uri: Uri): Result<String>
+
+    /** Obtiene el perfil del usuario autenticado. */
     suspend fun getProfile(): Result<User>
+
+    /** Sube o reemplaza el avatar. Devuelve la URL absoluta resultante. */
+    suspend fun uploadAvatar(uri: android.net.Uri): Result<String>
+
+    // ── Notificaciones de staff ───────────────────────────────────────────────
+    suspend fun sendNotification(
+        subject: String,
+        message: String,
+        userId:  Int? = null,
+    ): Result<com.shopapp.domain.model.NotificationResult>
 }
