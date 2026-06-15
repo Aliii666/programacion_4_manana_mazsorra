@@ -45,3 +45,25 @@ interface UserApi {
         @Part avatar: MultipartBody.Part,
     ): Response<UserDto>
 }
+
+import com.shopapp.data.remote.dto.NotificationResultDto
+import com.shopapp.data.remote.dto.SendNotificationDto
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.POST
+
+interface UserApi {
+    // ... endpoints existentes y de reset (sección 13.2) ...
+
+    // ── Notificaciones de staff ───────────────────────────────────────────────
+
+    /**
+     * Envía un correo personalizado o masivo.
+     * Requiere is_staff = true en el backend (IsAdminUser → 403 si no es staff).
+     * Backend: POST /api/emails/send/
+     */
+    @POST("emails/send/")
+    suspend fun sendNotification(
+        @Body body: SendNotificationDto,
+    ): Response<NotificationResultDto>
+}
