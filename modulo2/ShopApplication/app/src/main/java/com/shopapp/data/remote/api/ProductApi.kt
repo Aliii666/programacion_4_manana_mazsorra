@@ -2,7 +2,6 @@
 package com.shopapp.data.remote.api
 
 import com.shopapp.data.remote.dto.*
-import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -39,10 +38,15 @@ interface ProductApi {
     @GET("products/stats/")
     suspend fun getStats(): Response<ProductStatsDto>
 
+    /**
+     * Sube o reemplaza la imagen de un producto.
+     * Solo accesible para usuarios con is_staff = true.
+     * Backend: PATCH /api/products/{id}/  multipart/form-data campo "image"
+     */
     @Multipart
     @PATCH("products/{id}/")
     suspend fun uploadProductImage(
         @Path("id") id: Int,
-        @Part image: MultipartBody.Part,
+        @Part image: okhttp3.MultipartBody.Part,
     ): Response<ProductDto>
 }

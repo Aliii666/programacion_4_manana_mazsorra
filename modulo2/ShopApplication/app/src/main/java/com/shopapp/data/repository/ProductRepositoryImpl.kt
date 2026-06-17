@@ -9,16 +9,14 @@ import com.shopapp.domain.model.Product
 import com.shopapp.domain.model.ProductFilters
 import com.shopapp.domain.model.ProductPayload
 import com.shopapp.domain.repository.ProductRepository
-import javax.inject.Inject
-import javax.inject.Singleton
+import dagger.hilt.android.qualifiers.ApplicationContext
 import android.content.Context
 import android.net.Uri
-
-import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
-
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class ProductRepositoryImpl @Inject constructor(
@@ -102,6 +100,12 @@ class ProductRepositoryImpl @Inject constructor(
         }
 }
 
+// ── Extensión interna reutilizada por ambos repositorios ──────────────────────
+
+/**
+ * Convierte una URI de la galería en un [MultipartBody.Part] listo para Retrofit.
+ * Detecta el MIME type real del archivo; si no puede determinarlo usa image/jpeg.
+ */
 internal fun Uri.toMultipart(context: Context, fieldName: String): MultipartBody.Part {
     val resolver    = context.contentResolver
     val mimeType    = resolver.getType(this) ?: "image/jpeg"

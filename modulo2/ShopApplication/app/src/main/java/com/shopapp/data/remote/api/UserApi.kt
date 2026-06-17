@@ -2,7 +2,6 @@
 package com.shopapp.data.remote.api
 
 import com.shopapp.data.remote.dto.*
-import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -39,21 +38,15 @@ interface UserApi {
     @GET("users/stats/")
     suspend fun getStats(): Response<UserStatsDto>
 
+    /**
+     * Sube o reemplaza el avatar del usuario autenticado.
+     * Backend: PATCH /api/users/profile/  multipart/form-data campo "avatar"
+     */
     @Multipart
     @PATCH("users/profile/")
     suspend fun uploadAvatar(
-        @Part avatar: MultipartBody.Part,
+        @Part avatar: okhttp3.MultipartBody.Part,
     ): Response<UserDto>
-}
-
-import com.shopapp.data.remote.dto.NotificationResultDto
-import com.shopapp.data.remote.dto.SendNotificationDto
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-
-interface UserApi {
-    // ... endpoints existentes y de reset (sección 13.2) ...
 
     // ── Notificaciones de staff ───────────────────────────────────────────────
 

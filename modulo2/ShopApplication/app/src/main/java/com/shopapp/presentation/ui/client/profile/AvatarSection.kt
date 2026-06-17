@@ -33,7 +33,7 @@ import coil.request.ImageRequest
  *
  * @param avatarUrl       URL absoluta del avatar actual (puede ser null).
  * @param username        Nombre de usuario para calcular iniciales y color de fondo.
- * @param isUploading     true mientras se está enviar el nuevo avatar al servidor.
+ * @param isUploading     true mientras se está enviando el nuevo avatar al servidor.
  * @param onImageSelected Se invoca con la URI seleccionada por el usuario.
  */
 @Composable

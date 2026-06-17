@@ -65,11 +65,19 @@ fun ProductFormSheet(
                 .navigationBarsPadding(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
+            Text(
+                text       = if (isEdit) "Editar: ${initial?.name}" else "Nuevo producto",
+                style      = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color      = TextPrimary,
+            )
+
+            // ── Imagen del producto (solo al editar) ─────────────────────────────────────
             if (isEdit && initial != null) {
                 ProductImageSection(
                     productId       = initial.id,
                     currentImageUrl = initial.imageUrl,
-                    isStaff         = true,
+                    isStaff         = true,         // solo staff llega hasta aquí
                     onImageUpdated  = onImageUpdated,
                     modifier        = Modifier
                         .fillMaxWidth()
@@ -77,12 +85,6 @@ fun ProductFormSheet(
                 )
                 Spacer(Modifier.height(8.dp))
             }
-            Text(
-                text       = if (isEdit) "Editar: ${initial?.name}" else "Nuevo producto",
-                style      = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color      = TextPrimary,
-            )
 
             // Error global
             if (formState is ProductFormState.Error) {

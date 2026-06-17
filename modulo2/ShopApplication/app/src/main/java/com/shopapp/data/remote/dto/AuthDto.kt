@@ -37,8 +37,6 @@ data class TokenRefreshResponseDto(
     val refresh: String?,   // con ROTATE_REFRESH_TOKENS=True también devuelve nuevo refresh
 )
 
-import com.google.gson.annotations.SerializedName
-
 /** Cuerpo del POST /api/auth/password-reset/ */
 data class PasswordResetRequestDto(
     @SerializedName("email") val email: String,

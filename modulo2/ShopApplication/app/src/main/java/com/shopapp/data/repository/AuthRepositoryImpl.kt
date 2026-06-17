@@ -9,6 +9,8 @@ import com.shopapp.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.shopapp.data.remote.dto.PasswordResetConfirmDto
+import com.shopapp.data.remote.dto.PasswordResetRequestDto
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
@@ -73,19 +75,6 @@ class AuthRepositoryImpl @Inject constructor(
             "Error $code"
         }
     }
-}
-
-    // ── Recuperación de contraseña ───────────────────────────────────────────
-    suspend fun requestReset(email: String): Result<String>
-    suspend fun confirmReset(
-        uid:          String,
-        token:        String,
-        newPassword:  String,
-        newPassword2: String,
-    ): Result<String>
-
-import com.shopapp.data.remote.dto.PasswordResetConfirmDto
-import com.shopapp.data.remote.dto.PasswordResetRequestDto
 
     override suspend fun requestReset(email: String): Result<String> =
         runCatching {
@@ -118,3 +107,4 @@ import com.shopapp.data.remote.dto.PasswordResetRequestDto
                 error(response.errorBody()?.string() ?: "Error ${response.code()}")
             }
         }
+}
