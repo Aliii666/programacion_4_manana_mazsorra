@@ -10,220 +10,308 @@ class CatalogoBasicos extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // ── Text básico ───────────────────────────────────────────────────────
-const Text(
-  'nginx-proxy: En línea',
-  style: TextStyle(
-    fontSize:      20,
-    fontWeight:    FontWeight.bold,    // .w100–.w900  ·  .bold = .w700
-    color:         Colors.green,
-    letterSpacing: 0.5,
-    fontStyle:     FontStyle.normal,   // .italic
-    decoration:    TextDecoration.underline, // <-- Cambiado: .underline (puedes usar .lineThrough)
-    shadows: [                               // <-- Añadido: Sombra
-      Shadow(
-        color: Colors.black26, 
-        blurRadius: 4, 
-        offset: Offset(2, 2)
-      )
-    ], 
-  ),
-),
-const SizedBox(height: 8),
+          // ── Text básico con sombra y underline ───────────────────────────────
+          const Text(
+            'nginx-proxy: En línea',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+              letterSpacing: 0.5,
+              decoration: TextDecoration.underline,
+              shadows: [
+                Shadow(
+                  color: Colors.black26,
+                  blurRadius: 4,
+                  offset: Offset(2, 2),
+                ),
+              ],
+            ),
+          ),
 
-// ── Alineación y desbordamiento ───────────────────────────────────────
-SizedBox(
-  width: double.infinity,
-  child: Text(
-    // <-- Cambiado: Texto más largo para probar el salto de línea y la justificación
-    'api-gateway-produccion-region-us-east → sin respuesta. El servidor ha agotado el tiempo de espera y se ha desconectado forzosamente debido a la alta latencia.',
-    textAlign: TextAlign.justify,       // <-- Cambiado: .justify
-    maxLines:  2,                       // <-- Cambiado: 2 líneas permitidas
-    overflow:  TextOverflow.fade,       // <-- Cambiado: .fade (cambia a .clip para ver la diferencia)
-    softWrap:  false,                   // <-- Añadido: Evita que el texto salte de línea
-  ),
-),
-const SizedBox(height: 8),
+          const SizedBox(height: 16),
 
-// ── Text.rich — estilos distintos en un solo widget ───────────────────
-const Text.rich(
-  TextSpan(children: [
-    TextSpan(text: 'Estado: ',
-        style: TextStyle(fontWeight: FontWeight.w600)),
-    TextSpan(text: 'CRÍTICO',
-        style: TextStyle(color: Color.fromARGB(255, 54, 244, 171), fontWeight: FontWeight.bold)),
-    TextSpan(text: ' — última revisión hace 5 min',
-        style: TextStyle(color: Colors.grey, fontSize: 12)),
-  ]),
-),
-const SizedBox(height: 8),
+          // ── Alineación y desbordamiento ──────────────────────────────────────
+          SizedBox(
+            width: 250,
+            child: Text(
+              'api-gateway-produccion-region-us-east con una descripción muy larga para demostrar el uso de varias líneas y el efecto fade',
+              textAlign: TextAlign.center,
+              maxLines: 2, // antes era 1
+              overflow: TextOverflow.fade, // prueba también .clip
+            ),
+          ),
 
-// ── SelectableText — el usuario puede seleccionar y copiar ───────────
-const SelectableText(
-  '10.0.0.12:5432',
-  style: TextStyle(fontFamily: 'monospace', fontSize: 14),
-),
-const Divider(height: 32),
-// Agrega a children: [ ... ]
+          const SizedBox(height: 16),
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  // <-- Se quitó el 'const' de esta lista porque Theme.of(context) necesita leer 
-  // la configuración en tiempo real y no puede ser una constante.
-  children: [
-    // <-- Añadido: Tooltip que aparece al mantener pulsado
-    Tooltip(
-      message: 'Servidor activo',
-      child: Icon(
-        Icons.check_circle_outline, // <-- Cambiado: Versión con contorno (prueba Icons.check_circle para relleno)
-        size: 80,                   // <-- Cambiado: Escala muy grande (80)
-        color: Theme.of(context).colorScheme.primary, // <-- Cambiado: Usa el color principal del tema actual
-      ),
-    ),
-    const Icon(
-      Icons.cancel, 
-      size: 14,                     // <-- Cambiado: Escala muy pequeña (14)
-      color: Color.fromARGB(255, 54, 130, 244)
-    ),
-    const Icon(Icons.warning_amber, size: 40, color: Colors.orange),
-    const Icon(Icons.dns,           size: 40, color: Colors.black12),
-    const Icon(Icons.wifi_off,      size: 40, color: Colors.grey),
-  ],
-),
-const SizedBox(height: 8),
-const Icon(Icons.settings,
-    size:          24,
-    color:         Colors.blueGrey,
-    semanticLabel: 'Configuración'),   // leído por lectores de pantalla
-const Divider(height: 32),
+          // ── Text.rich con lineThrough ────────────────────────────────────────
+          const Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Estado: ',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                TextSpan(
+                  text: 'CRÍTICO',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                TextSpan(
+                  text: ' — última revisión hace 5 min',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
 
+          const SizedBox(height: 16),
 
-// ── Cuatro variantes ──────────────────────────────────────────────────
-Wrap(
-  spacing: 8,
-  runSpacing: 8,
-  children: [
-    ElevatedButton(
-      onPressed: () {},
-      child: const Text('Conectar'),
-    ),
-    FilledButton(
-      onPressed: () {},
-      child: const Text('Iniciar'),
-    ),
-    OutlinedButton(
-      onPressed: () {},
-      child: const Text('Monitorear'),
-    ),
-    TextButton(
-      onPressed: () {},
-      child: const Text('Detalles'),
-    ),
-    ElevatedButton(
-      onPressed: () {}, // ahora está activado
-      child: const Text('Activado'),
-    ),
-  ],
-),
-const SizedBox(height: 12),
+          // ── Texto largo justificado y sin salto de línea ────────────────────
+          const Text(
+            'Este es un texto bastante largo para observar cómo funciona la justificación completa dentro del widget Text. Cuando el texto ocupa varias líneas, Flutter distribuye los espacios para alinear ambos márgenes.',
+            textAlign: TextAlign.justify,
+            softWrap: false, // prueba quitarlo para comparar
+          ),
 
-// ── Variantes .icon ───────────────────────────────────────────────────
-Wrap(
-  spacing: 8,
-  runSpacing: 8,
-  children: [
-    ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.sync_rounded, size: 18),
-      label: const Text('Actualizar'),
-    ),
-    FilledButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.power_settings_new_rounded, size: 18),
-      label: const Text('Apagar'),
-    ),
-    TextButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.visibility_rounded, size: 18),
-      label: const Text('Ver'),
-    ),
-    OutlinedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.analytics_rounded, size: 18),
-      label: const Text('Analizar'),
-    ),
-    Tooltip(
-      message: 'Detiene todos los servicios',
-      child: IconButton(
-        onPressed: () {},
-        icon: const Icon(Icons.tune_rounded),
-        color: Colors.deepOrangeAccent,
-        iconSize: 28,
-      ),
-    ),
-  ],
-),
-const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
-// ── Botón con estilo personalizado ────────────────────────────────────
-ElevatedButton(
-  onPressed: () {},
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color.fromARGB(255, 214, 255, 64),
-    foregroundColor: Colors.white,
+          // ── SelectableText ───────────────────────────────────────────────────
+          const SelectableText(
+            '10.0.0.12:5432',
+            style: TextStyle(fontFamily: 'monospace', fontSize: 14),
+          ),
 
-    // Prueba 0 o 12
-    elevation: 12,
+          const Divider(height: 32),
 
-    padding: const EdgeInsets.symmetric(
-      horizontal: 32,
-      vertical: 14,
-    ),
+          // Agrega a children: [ ... ]
+          // ── Íconos de estado ──────────────────────────────────────────────────
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Tooltip(
+                message: 'Servidor activo',
+                child: Icon(
+                  Icons
+                      .check_circle_outline, // prueba también Icons.check_circle
+                  size: 80, // prueba también 14
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              const Icon(Icons.cancel, size: 40, color: Colors.red),
+              const Icon(Icons.warning_amber, size: 40, color: Colors.orange),
+              const Icon(Icons.dns, size: 40, color: Colors.indigo),
+              const Icon(Icons.wifi_off, size: 40, color: Colors.grey),
+            ],
+          ),
 
-    // Botón tipo píldora
-    shape: const StadiumBorder(),
+          const SizedBox(height: 8),
 
-    // minimumSize eliminado
-  ),
-  child: const Text(
-    'Ejecutar acción',
-    style: TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-      letterSpacing: 0.5,
-    ),
-  ),
-),
+          const Icon(
+            Icons.settings,
+            size: 24,
+            color: Colors.blueGrey,
+            semanticLabel: 'Configuración',
+          ),
 
-const Divider(height: 32),
-// Agrega a children: [ ... ]
+          const Divider(height: 32),
 
-Card(
-  elevation: 3,
-  margin: const EdgeInsets.only(bottom: 8),
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-  child: ListTile(
-    leading:  const Icon(Icons.dns, color: Colors.indigo),
-    title:    const Text('nginx-proxy'),
-    subtitle: const Text('10.0.0.5 · 45ms'),
-    trailing: const Icon(Icons.circle, color: Colors.green, size: 12),
-    onTap:    () {},           // toda la fila queda tocable
-  ),
-),
-Card(
-  elevation: 1,
-  child: ListTile(
-    leading: CircleAvatar(
-      backgroundColor: Colors.red.shade100,
-      child: const Icon(Icons.cancel, color: Colors.red, size: 20),
-    ),
-    title:    const Text('backup-worker'),
-    subtitle: const Text('sin respuesta · 10.0.0.30'),
-    trailing: TextButton(onPressed: () {}, child: const Text('Ver')),
-  ),
-),
-const Divider(height: 32),
-          // ← pega aquí cada bloque al avanzar
+          // Agrega a children: [ ... ]
+
+          // ── Cuatro variantes ──────────────────────────────────────────────────
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('ElevatedButton'),
+              ),
+              FilledButton(onPressed: () {}, child: const Text('FilledButton')),
+              OutlinedButton(
+                onPressed: () {},
+                child: const Text('OutlinedButton'),
+              ),
+              TextButton(onPressed: () {}, child: const Text('TextButton')),
+              ElevatedButton(onPressed: null, child: const Text('Desactivado')),
+              //             ↑ onPressed: null → desactiva el botón visualmente
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // ── Variantes .icon ───────────────────────────────────────────────────
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.refresh, size: 18),
+                label: const Text('Reiniciar'),
+              ),
+              FilledButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.stop, size: 18),
+                label: const Text('Detener'),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.settings),
+                color: Colors.indigo,
+                iconSize: 28,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // ── Botón con estilo personalizado ────────────────────────────────────
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade600,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              shape: const StadiumBorder(),
+              elevation: 12,
+              minimumSize: const Size(
+                double.infinity,
+                0,
+              ), // ocupa todo el ancho
+            ),
+            child: const Text(
+              'Acción crítica',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          const Divider(height: 32),
+
+          Card(
+            elevation: 3,
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.dns, color: Colors.indigo),
+              title: const Text('nginx-proxy'),
+              subtitle: const Text('10.0.0.5 · 45ms'),
+              trailing: const Icon(Icons.circle, color: Colors.green, size: 12),
+              onTap: () {}, // toda la fila queda tocable
+            ),
+          ),
+          Card(
+            elevation: 12,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.red.shade50,
+                child: const Icon(Icons.cancel, color: Colors.red, size: 20),
+              ),
+              title: const Text('backup-worker'),
+              subtitle: const Text('sin respuesta · 10.0.0.30'),
+              trailing: TextButton(onPressed: () {}, child: const Text('Ver')),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
+            ),
+          ),
+          const Divider(height: 32),
+
+          // Agrega a children: [ ... ]
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              const Chip(label: Text('nginx')),
+              const Chip(
+                avatar: Icon(Icons.check, size: 16, color: Colors.white),
+                label: Text('TLS 1.3'),
+                backgroundColor: Colors.green,
+                labelStyle: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              FilterChip(
+                label: const Text('HTTP/2'),
+                selected: false,
+                onSelected: (_) {},
+              ),
+              ActionChip(
+                label: const Text('Ver logs'),
+                avatar: const Icon(Icons.open_in_new, size: 16),
+                onPressed: () {},
+              ),
+
+              // Lenguajes de programación
+              const Chip(
+                label: Text('Dart'),
+                backgroundColor: Colors.blue,
+                labelStyle: TextStyle(color: Colors.white),
+              ),
+              const Chip(
+                label: Text('Python'),
+                backgroundColor: Colors.green,
+                labelStyle: TextStyle(color: Colors.white),
+              ),
+              const Chip(
+                label: Text('JavaScript'),
+                backgroundColor: Colors.yellow,
+              ),
+            ],
+          ),
+          const Divider(height: 32),
+
+          // Agrega a children: [ ... ]
+
+          // ── Circular ──────────────────────────────────────────────────────────
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: CircularProgressIndicator(
+                
+                ),
+              ), // value: null → animación continua
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: CircularProgressIndicator(
+                  value: 0.7, // 70 %
+                  color: Colors.green,
+                  strokeWidth: 6,
+                ),
+              ),
+              SizedBox(
+                width: 48,
+                height: 48,
+                child: CircularProgressIndicator(
+                  value: 0.3,
+                  color: Colors.red,
+                  strokeWidth: 3,
+                  strokeCap: StrokeCap.round, // puntas redondeadas
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // ── Lineal ────────────────────────────────────────────────────────────
+          const LinearProgressIndicator(), // indeterminado
+          const SizedBox(height: 8),
+          const LinearProgressIndicator(
+            value: null,
+            color: Colors.indigo,
+          ), // 60 %
+          const SizedBox(height: 8),
+          const LinearProgressIndicator(
+            value: 1.0,
+            color: Colors.green,
+            minHeight: 12, // barra más gruesa (default: 4)
+          ),
+          const Divider(height: 32),
         ],
       ),
     );
