@@ -5,14 +5,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/image_upload_provider.dart';
+import '../../providers/profile_provider.dart';
+import '../../widgets/user_avatar.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authProvider).user;
-    final tt   = Theme.of(context).textTheme;
+    final user         = ref.watch(authProvider).user;
+    final profileAsync = ref.watch(profileProvider);
+    final uploadState  = ref.watch(imageUploadProvider);
+    final tt           = Theme.of(context).textTheme;
+
+    ref.listen<ImageUploadState>(imageUploadProvider, (_, next) {
+      if (next is ImageUploadSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Avatar actualizado correctamente.')),
+        );
+        ref.invalidate(profileProvider);
+        ref.read(imageUploadProvider.notifier).reset();
+      } else if (next is ImageUploadError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:         Text(next.message),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        ref.read(imageUploadProvider.notifier).reset();
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -22,41 +45,31 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 24),
 
-              // Avatar con inicial
-              Container(
-                width:  80,
-                height: 80,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.accent, AppColors.accentLight],
-                    begin:  Alignment.topLeft,
-                    end:    Alignment.bottomRight,
+              // Avatar con tap para cambiar
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  UserAvatar(
+                    avatarUrl: profileAsync.valueOrNull?.avatarUrl,
+                    username:  user?.username,
+                    radius:    40,
+                    onTap: uploadState is ImageUploadLoading
+                        ? null
+                        : () => ref
+                            .read(imageUploadProvider.notifier)
+                            .pickAndUploadAvatar(),
                   ),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    (user?.username.isNotEmpty == true)
-                        ? user!.username[0].toUpperCase()
-                        : '?',
-                    style: const TextStyle(
-                      color:      AppColors.onAccent,
-                      fontSize:   34,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                  if (uploadState is ImageUploadLoading)
+                    const CircularProgressIndicator(),
+                ],
               ),
               const SizedBox(height: 16),
-
               Text(user?.username ?? '—', style: tt.headlineMedium),
               Text(user?.email    ?? '—', style: tt.bodyMedium),
               const SizedBox(height: 8),
-
-              // Badge staff
               if (user?.isStaff == true)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  padding:    const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                   decoration: BoxDecoration(
                     color:        AppColors.accent.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(999),
@@ -73,7 +86,7 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               const SizedBox(height: 32),
 
-              // Tarjeta de información
+              // Información de la cuenta
               Container(
                 width:   double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -98,8 +111,7 @@ class ProfileScreen extends ConsumerWidget {
                       ('ID de usuario', user?.id.toString() ?? '—'),
                       ('Usuario',       user?.username      ?? '—'),
                       ('Email',         user?.email         ?? '—'),
-                      ('Rol',
-                          user?.isStaff == true ? 'Administrador' : 'Cliente'),
+                      ('Rol',           user?.isStaff == true ? 'Administrador' : 'Cliente'),
                     ].asMap().entries.map((entry) {
                       final isLast = entry.key == 3;
                       return Column(
@@ -110,13 +122,11 @@ class ProfileScreen extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(entry.value.$1,
-                                    style: const TextStyle(
-                                        color: AppColors.textSecondary)),
+                                    style: const TextStyle(color: AppColors.textSecondary)),
                                 Text(
                                   entry.value.$2,
                                   style: const TextStyle(
-                                    color:      AppColors.textPrimary,
-                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary, fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -143,13 +153,22 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
+                SizedBox(
+                  width:  double.infinity,
+                  height: 52,
+                  child:  ElevatedButton.icon(
+                    onPressed: () => context.push('/send-notification'),
+                    icon:  const Icon(Icons.send_outlined),
+                    label: const Text('Enviar notificación'),
+                  ),
+                ),
+                const SizedBox(height: 12),
               ],
 
               // Botón logout
               _LogoutButton(
                 onConfirm: () async {
                   await ref.read(authProvider.notifier).logout();
-                  if (context.mounted) context.go('/login');
                 },
               ),
               const SizedBox(height: 32),
@@ -169,33 +188,32 @@ class _LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
     width:  double.infinity,
     height: 52,
-    child: OutlinedButton.icon(
+    child:  OutlinedButton.icon(
       onPressed: () => showDialog(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (dialogContext) => AlertDialog(
           backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)),
-          title: const Text('¿Cerrar sesión?',
+          shape:           RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title:           const Text('¿Cerrar sesión?',
               style: TextStyle(color: AppColors.textPrimary)),
-          content: const Text(
+          content:         const Text(
             'Tu sesión se cerrará en este dispositivo.',
             style: TextStyle(color: AppColors.textSecondary),
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(dialogContext),
               child:     const Text('Cancelar'),
             ),
             TextButton(
               onPressed: () async {
-                Navigator.pop(context);
+                Navigator.of(dialogContext).pop();
+                await Future.delayed(const Duration(milliseconds: 100));
                 await onConfirm();
               },
               child: const Text(
                 'Cerrar sesión',
-                style: TextStyle(
-                    color: AppColors.error, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -205,7 +223,7 @@ class _LogoutButton extends StatelessWidget {
       label: const Text('Cerrar sesión'),
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.error,
-        side: BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
+        side:            BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
       ),
     ),
   );

@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_shop_app/presentation/widgets/authtextfield.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_colors.dart';
 import '../../../core/utils/validators.dart';
 import '../../../domain/model/auth_state.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/auth_button.dart';
-import '../../widgets/auth_text_field.dart';
+
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -18,10 +19,10 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _formKey   = GlobalKey<FormState>();
-  final _userCtrl  = TextEditingController();
-  final _passCtrl  = TextEditingController();
-  bool  _submitted = false;
+  final _formKey    = GlobalKey<FormState>();
+  final _userCtrl   = TextEditingController();
+  final _passCtrl   = TextEditingController();
+  bool  _submitted  = false;
 
   @override
   void dispose() {
@@ -136,6 +137,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         label:     'Iniciar sesión',
                         onPressed: _submit,
                         isLoading: isLoading,
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () => context.push('/forgot-password'),
+                        child:     const Text('¿Olvidaste tu contraseña?'),
                       ),
                     ],
                   ),
