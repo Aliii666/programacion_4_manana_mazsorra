@@ -1,4 +1,4 @@
-// lib/presentation/providers/catalog_provider.dart — versión M5
+// lib/presentation/providers/catalog_provider.dart — versión M5 actualizada
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/remote/api/category_remote_datasource.dart';
@@ -8,29 +8,29 @@ import '../../domain/model/product.dart';
 
 // ── Estado del catálogo ──────────────────────────────────────
 class CatalogState {
-  final List<Product>  products;
+  final List<Product> products;
   final List<Category> categories;
-  final bool           isLoading;
-  final bool           isLoadingMore;
-  final String?        error;
-  final int            total;
-  final bool           hasMore;
-  final int            page;
-  final String?        search;
-  final int?           categoryId;
-  final double?        minPrice;
-  final double?        maxPrice;
-  final String?        ordering;
+  final bool isLoading;
+  final bool isLoadingMore;
+  final String? error;
+  final int total;
+  final bool hasMore;
+  final int page;
+  final String? search;
+  final int? categoryId;
+  final double? minPrice;
+  final double? maxPrice;
+  final String? ordering;
 
   const CatalogState({
-    this.products      = const [],
-    this.categories    = const [],
-    this.isLoading     = false,
+    this.products = const [],
+    this.categories = const [],
+    this.isLoading = false,
     this.isLoadingMore = false,
     this.error,
-    this.total         = 0,
-    this.hasMore       = false,
-    this.page          = 1,
+    this.total = 0,
+    this.hasMore = false,
+    this.page = 1,
     this.search,
     this.categoryId,
     this.minPrice,
@@ -39,39 +39,38 @@ class CatalogState {
   });
 
   CatalogState copyWith({
-    List<Product>?  products,
+    List<Product>? products,
     List<Category>? categories,
-    bool?           isLoading,
-    bool?           isLoadingMore,
-    String?         error,
-    int?            total,
-    bool?           hasMore,
-    int?            page,
-    String?         search,
-    int?            categoryId,
-    double?         minPrice,
-    double?         maxPrice,
-    String?         ordering,
-  }) =>
-      CatalogState(
-        products:      products      ?? this.products,
-        categories:    categories    ?? this.categories,
-        isLoading:     isLoading     ?? this.isLoading,
-        isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-        error:         error,
-        total:         total         ?? this.total,
-        hasMore:       hasMore       ?? this.hasMore,
-        page:          page          ?? this.page,
-        search:        search,
-        categoryId:    categoryId,
-        minPrice:      minPrice,
-        maxPrice:      maxPrice,
-        ordering:      ordering,
-      );
+    bool? isLoading,
+    bool? isLoadingMore,
+    String? error,
+    int? total,
+    bool? hasMore,
+    int? page,
+    String? search,
+    int? categoryId,
+    double? minPrice,
+    double? maxPrice,
+    String? ordering,
+  }) => CatalogState(
+    products: products ?? this.products,
+    categories: categories ?? this.categories,
+    isLoading: isLoading ?? this.isLoading,
+    isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+    error: error,
+    total: total ?? this.total,
+    hasMore: hasMore ?? this.hasMore,
+    page: page ?? this.page,
+    search: search,
+    categoryId: categoryId,
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    ordering: ordering,
+  );
 }
 
 class CatalogNotifier extends StateNotifier<CatalogState> {
-  final ProductRemoteDatasource  _productDs;
+  final ProductRemoteDatasource _productDs;
   final CategoryRemoteDatasource _categoryDs;
 
   CatalogNotifier(this._productDs, this._categoryDs)
@@ -84,13 +83,13 @@ class CatalogNotifier extends StateNotifier<CatalogState> {
     try {
       final cats = await _categoryDs.getCategories();
       state = state.copyWith(categories: cats);
-    } catch (_) {
-      // No bloquear la UI si las categorías fallan
+    } catch (e) {
+      // No fallar si no cargan categorías
     }
   }
 
   Future<void> load({bool reset = true}) async {
-    final s    = state;
+    final s = state;
     final page = reset ? 1 : s.page;
 
     if (reset) {
@@ -102,27 +101,27 @@ class CatalogNotifier extends StateNotifier<CatalogState> {
 
     try {
       final result = await _productDs.getProducts(
-        page:     page,
-        search:   s.search,
+        page: page,
+        search: s.search,
         category: s.categoryId,
         priceMin: s.minPrice,
         priceMax: s.maxPrice,
         ordering: s.ordering,
       );
       state = state.copyWith(
-        products:      reset ? result.results : [...state.products, ...result.results],
-        total:         result.count,
-        hasMore:       result.next != null,
-        isLoading:     false,
+        products: reset ? result.results : [...state.products, ...result.results],
+        total: result.count,
+        hasMore: result.next != null,
+        isLoading: false,
         isLoadingMore: false,
-        page:          page + 1,
-        error:         null,
+        page: page + 1,
+        error: null,
       );
     } catch (e) {
       state = state.copyWith(
-        isLoading:     false,
+        isLoading: false,
         isLoadingMore: false,
-        error:         e.toString().replaceAll('Exception: ', ''),
+        error: e.toString().replaceAll('Exception: ', ''),
       );
     }
   }
@@ -149,17 +148,17 @@ class CatalogNotifier extends StateNotifier<CatalogState> {
 
   void clearFilters() {
     state = state.copyWith(
-      search:     null,
+      search: null,
       categoryId: null,
-      minPrice:   null,
-      maxPrice:   null,
-      ordering:   null,
+      minPrice: null,
+      maxPrice: null,
+      ordering: null,
     );
     load();
   }
 
-  void loadMore()          => load(reset: false);
-  Future<void> refresh()   => load();
+  void loadMore() => load(reset: false);
+  Future<void> refresh() => load();
 }
 
 final catalogProvider = StateNotifierProvider<CatalogNotifier, CatalogState>((ref) {
@@ -169,13 +168,8 @@ final catalogProvider = StateNotifierProvider<CatalogNotifier, CatalogState>((re
   );
 });
 
-// Expone las categorías como AsyncValue para que los widgets usen `.when(...)`
+// Expose categories as an AsyncValue so UI code can use `when(...)` patterns.
 final categoriesProvider = Provider<AsyncValue<List<Category>>>((ref) {
   final state = ref.watch(catalogProvider);
   return AsyncValue.data(state.categories);
-});
-
-// Provider de un producto individual
-final productDetailProvider = FutureProvider.family<Product, int>((ref, id) {
-  return ref.watch(productDatasourceProvider).getProduct(id);
 });
