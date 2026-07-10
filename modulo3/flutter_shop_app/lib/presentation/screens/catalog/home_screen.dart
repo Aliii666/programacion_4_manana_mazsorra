@@ -22,12 +22,12 @@ class HomeScreen extends ConsumerWidget {
           // ── Hero ─────────────────────────────────────────
           SliverToBoxAdapter(
             child: Container(
-              width:  double.infinity,
+              width:   double.infinity,
               padding: const EdgeInsets.fromLTRB(24, 72, 24, 48),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end:   Alignment.bottomCenter,
+                  begin:  Alignment.topCenter,
+                  end:    Alignment.bottomCenter,
                   colors: [AppColors.surface2, AppColors.background],
                 ),
               ),
@@ -58,7 +58,7 @@ class HomeScreen extends ConsumerWidget {
                     onPressed: () => context.go('/catalog'),
                     icon:      const Icon(Icons.grid_view_rounded, size: 18),
                     label:     const Text('Ver catálogo'),
-                    style:     FilledButton.styleFrom(
+                    style: FilledButton.styleFrom(
                       backgroundColor: AppColors.accent,
                       foregroundColor: AppColors.onAccent,
                       shape: RoundedRectangleBorder(
@@ -97,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     SizedBox(
                       height: 80,
-                      child:  ListView.separated(
+                      child: ListView.separated(
                         padding:          const EdgeInsets.symmetric(horizontal: 24),
                         scrollDirection:  Axis.horizontal,
                         itemCount:        active.length,
@@ -124,10 +124,10 @@ class HomeScreen extends ConsumerWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     cat.name,
-                                    style:    const TextStyle(
-                                      color:     AppColors.textPrimary,
-                                      fontSize:  11,
-                                      fontWeight:FontWeight.w600,
+                                    style: const TextStyle(
+                                      color:      AppColors.textPrimary,
+                                      fontSize:   11,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                     maxLines:  1,
                                     overflow:  TextOverflow.ellipsis,
@@ -151,7 +151,7 @@ class HomeScreen extends ConsumerWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-              child:   Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Novedades', style: tt.titleLarge),
@@ -180,19 +180,20 @@ class HomeScreen extends ConsumerWidget {
               sliver: SliverGrid(
                 delegate: SliverChildBuilderDelegate(
                   (ctx, i) {
-                    final product = catalogState.products.take(4).toList()[i];
+                    final items   = catalogState.products.take(4).toList();
+                    final product = items[i];
                     return ProductCard(
                       product: product,
-                      onTap:   () => context.push('/catalog/${product.id}'),
+                      onTap:   () => context.push('/product/${product.id}'),
                     );
                   },
                   childCount: catalogState.products.take(4).length,
                 ),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:    2,
-                  crossAxisSpacing:  12,
-                  mainAxisSpacing:   12,
-                  childAspectRatio:  0.68,
+                  crossAxisCount:   2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing:  12,
+                  childAspectRatio: 0.68,
                 ),
               ),
             ),

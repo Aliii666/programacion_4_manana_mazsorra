@@ -28,23 +28,23 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Imagen
+            // ── Imagen ──────────────────────────────────────
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               child: AspectRatio(
                 aspectRatio: 1,
                 child: product.imageUrl != null
                     ? CachedNetworkImage(
-                        imageUrl:   product.imageUrl!,
-                        fit:        BoxFit.cover,
-                        placeholder:(_, __) => Container(color: AppColors.surface2),
-                        errorWidget:(_, __, ___) => _ImagePlaceholder(),
+                        imageUrl:    product.imageUrl!,
+                        fit:         BoxFit.cover,
+                        placeholder: (_, __) => Container(color: AppColors.surface2),
+                        errorWidget: (_, __, ___) => const _ImagePlaceholder(),
                       )
-                    : _ImagePlaceholder(),
+                    : const _ImagePlaceholder(),
               ),
             ),
 
-            // Info
+            // ── Info ────────────────────────────────────────
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8),
@@ -71,7 +71,7 @@ class ProductCard extends StatelessWidget {
                     Flexible(
                       child: Text(
                         product.name,
-                        style:    tt.bodySmall?.copyWith(
+                        style: tt.bodySmall?.copyWith(
                           color:      AppColors.textPrimary,
                           fontWeight: FontWeight.w600,
                         ),
@@ -113,9 +113,9 @@ class ProductCard extends StatelessWidget {
                         child: const Text(
                           'Sin stock',
                           style: TextStyle(
-                            color:     AppColors.error,
-                            fontSize:  8,
-                            fontWeight:FontWeight.bold,
+                            color:      AppColors.error,
+                            fontSize:   8,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -132,10 +132,12 @@ class ProductCard extends StatelessWidget {
 }
 
 class _ImagePlaceholder extends StatelessWidget {
+  const _ImagePlaceholder();
+
   @override
   Widget build(BuildContext context) => Container(
-    color:      AppColors.surface2,
-    alignment:  Alignment.center,
-    child:      const Text('📦', style: TextStyle(fontSize: 40)),
+    color:     AppColors.surface2,
+    alignment: Alignment.center,
+    child:     const Text('📦', style: TextStyle(fontSize: 40)),
   );
 }

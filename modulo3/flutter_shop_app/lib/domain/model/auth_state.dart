@@ -28,10 +28,10 @@ class AuthState {
       : status = AuthStatus.unauthenticated,
         user   = null;
 
-  bool get isAuthenticated  => status == AuthStatus.authenticated;
-  bool get isChecking       => status == AuthStatus.checking;
-  bool get isStaff          => user?.isStaff ?? false;
-  bool get isUnauthenticated=> status == AuthStatus.unauthenticated;
+  bool get isAuthenticated   => status == AuthStatus.authenticated;
+  bool get isChecking        => status == AuthStatus.checking;
+  bool get isStaff           => user?.isStaff ?? false;
+  bool get isUnauthenticated => status == AuthStatus.unauthenticated;
 
   AuthState copyWith({AuthStatus? status, LoggedUser? user, String? error}) => AuthState(
     status: status ?? this.status,

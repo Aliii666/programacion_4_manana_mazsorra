@@ -1,6 +1,5 @@
 // lib/domain/model/order.dart
 
-
 enum OrderStatus {
   pending  ('pending',   'Pendiente'),
   confirmed('confirmed', 'Confirmado'),

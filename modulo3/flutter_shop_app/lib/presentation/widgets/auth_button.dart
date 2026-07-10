@@ -22,7 +22,7 @@ class AuthButton extends StatelessWidget {
       height: 52,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
-        child:     isLoading
+        child: isLoading
             ? const SizedBox(
                 width:  20,
                 height: 20,

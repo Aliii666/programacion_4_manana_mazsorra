@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../theme/app_colors.dart';
 import '../../providers/auth_provider.dart';
 
@@ -23,11 +22,12 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 24),
 
-              // Avatar
+              // Avatar con inicial
               Container(
-                width:  80, height: 80,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
+                width:  80,
+                height: 80,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
                     colors: [AppColors.accent, AppColors.accentLight],
                     begin:  Alignment.topLeft,
                     end:    Alignment.bottomRight,
@@ -48,12 +48,15 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
+
               Text(user?.username ?? '—', style: tt.headlineMedium),
               Text(user?.email    ?? '—', style: tt.bodyMedium),
               const SizedBox(height: 8),
+
+              // Badge staff
               if (user?.isStaff == true)
                 Container(
-                  padding:    const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                   decoration: BoxDecoration(
                     color:        AppColors.accent.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(999),
@@ -69,30 +72,8 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
               const SizedBox(height: 32),
-              const SizedBox(height: 24),
 
-// Botón Admin — solo visible para staff
-if (user?.isStaff == true) ...[
-  SizedBox(
-    width:  double.infinity,
-    height: 52,
-    child:  ElevatedButton.icon(
-      onPressed: () => context.go('/admin'),
-      icon:  const Icon(Icons.admin_panel_settings_outlined),
-      label: const Text('Panel Admin'),
-    ),
-  ),
-  const SizedBox(height: 12),
-],
-
-// Botón logout (sin cambios)
-_LogoutButton(
-  onConfirm: () async {
-    await ref.read(authProvider.notifier).logout();
-  },
-),
-
-              // Info
+              // Tarjeta de información
               Container(
                 width:   double.infinity,
                 padding: const EdgeInsets.all(20),
@@ -117,7 +98,8 @@ _LogoutButton(
                       ('ID de usuario', user?.id.toString() ?? '—'),
                       ('Usuario',       user?.username      ?? '—'),
                       ('Email',         user?.email         ?? '—'),
-                      ('Rol',           user?.isStaff == true ? 'Administrador' : 'Cliente'),
+                      ('Rol',
+                          user?.isStaff == true ? 'Administrador' : 'Cliente'),
                     ].asMap().entries.map((entry) {
                       final isLast = entry.key == 3;
                       return Column(
@@ -128,11 +110,13 @@ _LogoutButton(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(entry.value.$1,
-                                    style: const TextStyle(color: AppColors.textSecondary)),
+                                    style: const TextStyle(
+                                        color: AppColors.textSecondary)),
                                 Text(
                                   entry.value.$2,
                                   style: const TextStyle(
-                                    color: AppColors.textPrimary, fontWeight: FontWeight.w600,
+                                    color:      AppColors.textPrimary,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -146,6 +130,20 @@ _LogoutButton(
                 ),
               ),
               const SizedBox(height: 24),
+
+              // Botón Admin — solo visible para staff
+              if (user?.isStaff == true) ...[
+                SizedBox(
+                  width:  double.infinity,
+                  height: 52,
+                  child:  ElevatedButton.icon(
+                    onPressed: () => context.go('/admin'),
+                    icon:  const Icon(Icons.admin_panel_settings_outlined),
+                    label: const Text('Panel Admin'),
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
 
               // Botón logout
               _LogoutButton(
@@ -171,21 +169,21 @@ class _LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(
     width:  double.infinity,
     height: 52,
-    child:  OutlinedButton.icon(
+    child: OutlinedButton.icon(
       onPressed: () => showDialog(
         context: context,
         builder: (_) => AlertDialog(
           backgroundColor: AppColors.surface,
-          shape:           RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title:           const Text('¿Cerrar sesión?',
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16)),
+          title: const Text('¿Cerrar sesión?',
               style: TextStyle(color: AppColors.textPrimary)),
-          content:         const Text(
+          content: const Text(
             'Tu sesión se cerrará en este dispositivo.',
             style: TextStyle(color: AppColors.textSecondary),
           ),
           actions: [
             TextButton(
- 
               onPressed: () => Navigator.pop(context),
               child:     const Text('Cancelar'),
             ),
@@ -196,7 +194,8 @@ class _LogoutButton extends StatelessWidget {
               },
               child: const Text(
                 'Cerrar sesión',
-                style: TextStyle(color: AppColors.error, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: AppColors.error, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -206,7 +205,7 @@ class _LogoutButton extends StatelessWidget {
       label: const Text('Cerrar sesión'),
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.error,
-        side:            BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
+        side: BorderSide(color: AppColors.error.withValues(alpha: 0.5)),
       ),
     ),
   );

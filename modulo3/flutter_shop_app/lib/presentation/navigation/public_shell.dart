@@ -8,15 +8,14 @@ import '../../theme/app_colors.dart';
 
 class PublicShell extends ConsumerWidget {
   final Widget child;
-  final bool   showCart;
-  const PublicShell({super.key, required this.child, this.showCart = true});
+  const PublicShell({super.key, required this.child});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cartCount   = ref.watch(cartProvider).totalItems;
-    final location    = GoRouterState.of(context).matchedLocation;
+    final cartCount = ref.watch(cartProvider).totalItems;
+    final location  = GoRouterState.of(context).matchedLocation;
 
-    int _selectedIndex() {
+    int selectedIndex() {
       if (location.startsWith('/catalog')) return 1;
       if (location.startsWith('/orders'))  return 2;
       if (location.startsWith('/cart'))    return 3;
@@ -27,23 +26,23 @@ class PublicShell extends ConsumerWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex(),
+        currentIndex: selectedIndex(),
         type:         BottomNavigationBarType.fixed,
         items: [
           const BottomNavigationBarItem(
-            icon:  Icon(Icons.home_outlined),
+            icon:       Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
-            label: 'Inicio',
+            label:      'Inicio',
           ),
           const BottomNavigationBarItem(
-            icon:  Icon(Icons.grid_view_outlined),
+            icon:       Icon(Icons.grid_view_outlined),
             activeIcon: Icon(Icons.grid_view),
-            label: 'Catálogo',
+            label:      'Catálogo',
           ),
           const BottomNavigationBarItem(
-            icon:  Icon(Icons.receipt_long_outlined),
+            icon:       Icon(Icons.receipt_long_outlined),
             activeIcon: Icon(Icons.receipt_long),
-            label: 'Pedidos',
+            label:      'Pedidos',
           ),
           BottomNavigationBarItem(
             icon: Stack(
@@ -63,8 +62,8 @@ class PublicShell extends ConsumerWidget {
                       child: Text(
                         cartCount > 99 ? '99+' : cartCount.toString(),
                         style: const TextStyle(
-                          color:    Colors.white,
-                          fontSize: 9,
+                          color:      Colors.white,
+                          fontSize:   9,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -73,19 +72,19 @@ class PublicShell extends ConsumerWidget {
               ],
             ),
             activeIcon: const Icon(Icons.shopping_cart),
-            label: 'Carrito',
+            label:      'Carrito',
           ),
           const BottomNavigationBarItem(
-            icon:  Icon(Icons.person_outline),
+            icon:       Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
-            label: 'Perfil',
+            label:      'Perfil',
           ),
         ],
         onTap: (index) {
           switch (index) {
             case 0: context.go('/');        break;
             case 1: context.go('/catalog'); break;
-            case 2: context.go('/orders');   break;
+            case 2: context.go('/orders');  break;
             case 3: context.go('/cart');    break;
             case 4: context.go('/profile'); break;
           }

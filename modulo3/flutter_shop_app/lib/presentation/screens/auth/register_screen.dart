@@ -18,12 +18,12 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
-  final _formKey     = GlobalKey<FormState>();
-  final _userCtrl    = TextEditingController();
-  final _emailCtrl   = TextEditingController();
-  final _passCtrl    = TextEditingController();
-  final _pass2Ctrl   = TextEditingController();
-  bool  _submitted   = false;
+  final _formKey   = GlobalKey<FormState>();
+  final _userCtrl  = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _passCtrl  = TextEditingController();
+  final _pass2Ctrl = TextEditingController();
+  bool  _submitted = false;
 
   @override
   void dispose() {
@@ -111,13 +111,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                       // Email
                       AuthTextField(
-                        label:       'Email',
-                        hint:        'tu@email.com',
-                        controller:  _emailCtrl,
-                        enabled:     !isLoading,
-                        keyboardType:TextInputType.emailAddress,
-                        validator:   _submitted ? validateEmail : null,
-                        onChanged:   (_) => ref.read(authProvider.notifier).clearError(),
+                        label:        'Email',
+                        hint:         'tu@email.com',
+                        controller:   _emailCtrl,
+                        enabled:      !isLoading,
+                        keyboardType: TextInputType.emailAddress,
+                        validator:    _submitted ? validateEmail : null,
+                        onChanged:    (_) => ref.read(authProvider.notifier).clearError(),
                       ),
                       const SizedBox(height: 14),
 

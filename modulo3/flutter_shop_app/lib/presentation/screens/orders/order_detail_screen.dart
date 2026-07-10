@@ -42,7 +42,8 @@ class OrderDetailScreen extends ConsumerWidget {
             children: [
               const Text('❌', style: TextStyle(fontSize: 40)),
               const SizedBox(height: 12),
-              Text(err.toString(), style: const TextStyle(color: AppColors.error)),
+              Text(err.toString(),
+                  style: const TextStyle(color: AppColors.error)),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => context.pop(),
@@ -52,32 +53,31 @@ class OrderDetailScreen extends ConsumerWidget {
           ),
         ),
         data: (order) {
-          final isCancelled  = order.status == OrderStatus.cancelled;
-          final currentStep  = _progressSteps.indexOf(order.status);
-          final taxAmount    = order.total - order.total / 1.15;
-          final subtotal     = order.total - taxAmount;
-          final dateStr      = formatDateTime(order.createdAt);
-          final updatedStr   = formatDateTime(order.updatedAt);
+          final isCancelled = order.status == OrderStatus.cancelled;
+          final currentStep = _progressSteps.indexOf(order.status);
+          final subtotal    = order.total / 1.15;
+          final taxAmount   = order.total - subtotal;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            child:   Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-                // Header con status
+                // Cabecera con estado
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment:  MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(dateStr,
-                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                        Text(formatDateTime(order.createdAt),
+                            style: const TextStyle(
+                                color: AppColors.textSecondary, fontSize: 13)),
                         const SizedBox(height: 4),
                         Text('Cliente: ${order.username}',
-                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                            style: const TextStyle(
+                                color: AppColors.textSecondary, fontSize: 13)),
                       ],
                     ),
                     StatusBadge(status: order.status),
@@ -85,7 +85,7 @@ class OrderDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // ── Barra de progreso ────────────────────────
+                // Barra de progreso o banner cancelado
                 if (!isCancelled) ...[
                   _SectionCard(
                     title: 'Estado del pedido',
@@ -102,17 +102,19 @@ class OrderDetailScreen extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color:        AppColors.error.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(12),
-                      border:       Border.all(color: AppColors.error.withValues(alpha: 0.3)),
+                      border: Border.all(
+                          color: AppColors.error.withValues(alpha: 0.3)),
                     ),
                     child: const Text(
                       '⚠️ Este pedido fue cancelado',
-                      style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: AppColors.error, fontWeight: FontWeight.w600),
                     ),
                   ),
                   const SizedBox(height: 14),
                 ],
 
-                // ── Productos ────────────────────────────────
+                // Productos
                 _SectionCard(
                   title: 'Productos (${order.numItems})',
                   child: Column(
@@ -121,12 +123,15 @@ class OrderDetailScreen extends ConsumerWidget {
                       child: Row(
                         children: [
                           Container(
-                            width:  44, height: 44,
+                            width:  44,
+                            height: 44,
                             decoration: BoxDecoration(
                               color:        AppColors.surface2,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Center(child: Text('📦', style: TextStyle(fontSize: 20))),
+                            child: const Center(
+                              child: Text('📦', style: TextStyle(fontSize: 20)),
+                            ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
@@ -135,12 +140,14 @@ class OrderDetailScreen extends ConsumerWidget {
                               children: [
                                 Text(item.productName,
                                     style: const TextStyle(
-                                      color: AppColors.textPrimary, fontWeight: FontWeight.w600,
+                                      color:      AppColors.textPrimary,
+                                      fontWeight: FontWeight.w600,
                                     )),
                                 Text(
                                   '${formatPrice(item.unitPrice)} × ${item.quantity} ud.',
                                   style: const TextStyle(
-                                    color: AppColors.textSecondary, fontSize: 12,
+                                    color:    AppColors.textSecondary,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ],
@@ -149,7 +156,8 @@ class OrderDetailScreen extends ConsumerWidget {
                           Text(
                             formatPrice(item.subtotal),
                             style: const TextStyle(
-                              color: AppColors.accent, fontWeight: FontWeight.bold,
+                              color:      AppColors.accent,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -159,28 +167,28 @@ class OrderDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 14),
 
-                // ── Resumen financiero ───────────────────────
+                // Resumen financiero
                 _SectionCard(
                   title: 'Resumen',
                   child: Column(
                     children: [
-                      _FinancialRow('Subtotal (sin IVA)', subtotal,      false),
+                      _FinancialRow('Subtotal (sin IVA)', subtotal,    false),
                       const SizedBox(height: 6),
-                      _FinancialRow('IVA (15%)',          taxAmount,     false),
+                      _FinancialRow('IVA (15%)',          taxAmount,   false),
                       const SizedBox(height: 8),
                       const Divider(),
                       const SizedBox(height: 8),
-                      _FinancialRow('Total',              order.total,   true),
+                      _FinancialRow('Total',              order.total, true),
                     ],
                   ),
                 ),
                 const SizedBox(height: 14),
 
-                // Meta
                 Center(
                   child: Text(
-                    'Actualizado: $updatedStr',
-                    style: const TextStyle(color: AppColors.textFaint, fontSize: 11),
+                    'Actualizado: ${formatDateTime(order.updatedAt)}',
+                    style: const TextStyle(
+                        color: AppColors.textFaint, fontSize: 11),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -193,7 +201,7 @@ class OrderDetailScreen extends ConsumerWidget {
   }
 }
 
-// ── Barra de progreso ─────────────────────────────────────────
+// ── Barra de progreso animada ─────────────────────────────────
 
 class _OrderProgressBar extends StatelessWidget {
   final List<OrderStatus> steps;
@@ -204,15 +212,14 @@ class _OrderProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: steps.asMap().entries.map((entry) {
-        final idx     = entry.key;
-        final step    = entry.value;
-        final isDone  = idx <= currentStep;
-        final isCurr  = idx == currentStep;
+        final idx    = entry.key;
+        final step   = entry.value;
+        final isDone = idx <= currentStep;
+        final isCurr = idx == currentStep;
 
         return Expanded(
           child: Row(
             children: [
-              // Nodo
               Column(
                 children: [
                   AnimatedContainer(
@@ -227,30 +234,28 @@ class _OrderProgressBar extends StatelessWidget {
                         width: isCurr ? 2 : 1,
                       ),
                       boxShadow: isCurr
-                          ? [BoxShadow(
-                              color:       AppColors.accent.withValues(alpha: 0.3),
-                              blurRadius:  8,
-                              spreadRadius:2,
-                            )]
+                          ? [
+                              BoxShadow(
+                                color:       AppColors.accent.withValues(alpha: 0.3),
+                                blurRadius:  8,
+                                spreadRadius:2,
+                              )
+                            ]
                           : null,
                     ),
                     child: Center(
                       child: isDone
-                          ? Text(
-                              '✓',
+                          ? Text('✓',
                               style: TextStyle(
                                 color:      AppColors.onAccent,
                                 fontWeight: FontWeight.bold,
                                 fontSize:   isCurr ? 14 : 12,
-                              ),
-                            )
-                          : Text(
-                              '${idx + 1}',
+                              ))
+                          : Text('${idx + 1}',
                               style: const TextStyle(
                                 color:    AppColors.textFaint,
                                 fontSize: 11,
-                              ),
-                            ),
+                              )),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -274,7 +279,9 @@ class _OrderProgressBar extends StatelessWidget {
                   child: Container(
                     height: 2,
                     margin: const EdgeInsets.only(bottom: 20),
-                    color:  idx < currentStep ? AppColors.accent : AppColors.border,
+                    color: idx < currentStep
+                        ? AppColors.accent
+                        : AppColors.border,
                   ),
                 ),
             ],
@@ -306,8 +313,10 @@ class _SectionCard extends StatelessWidget {
         Text(
           title.toUpperCase(),
           style: const TextStyle(
-            color: AppColors.textSecondary, fontSize: 11,
-            fontWeight: FontWeight.bold, letterSpacing: 0.8,
+            color:         AppColors.textSecondary,
+            fontSize:      11,
+            fontWeight:    FontWeight.bold,
+            letterSpacing: 0.8,
           ),
         ),
         const SizedBox(height: 14),

@@ -36,7 +36,9 @@ class CartNotifier extends StateNotifier<CartState> {
       updated[idx]  = updated[idx].copyWith(quantity: newQty);
       state = state.copyWith(items: updated);
     } else {
-      state = state.copyWith(items: [...state.items, CartItem(product: product, quantity: quantity)]);
+      state = state.copyWith(
+        items: [...state.items, CartItem(product: product, quantity: quantity)],
+      );
     }
   }
 
@@ -46,9 +48,9 @@ class CartNotifier extends StateNotifier<CartState> {
       return;
     }
     state = state.copyWith(
-      items: state.items.map((i) =>
-        i.product.id == productId ? i.copyWith(quantity: quantity) : i,
-      ).toList(),
+      items: state.items
+          .map((i) => i.product.id == productId ? i.copyWith(quantity: quantity) : i)
+          .toList(),
     );
   }
 

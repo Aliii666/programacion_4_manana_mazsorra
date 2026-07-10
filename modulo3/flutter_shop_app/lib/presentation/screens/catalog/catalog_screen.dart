@@ -1,6 +1,6 @@
 // lib/presentation/screens/catalog/catalog_screen.dart — versión M5
 
-import 'package:flutter/material.dart' hide SearchBar;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_colors.dart';
@@ -40,14 +40,14 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     final state = ref.read(catalogProvider);
     final activeFilters = ProductFilters(
       categoryId: state.categoryId,
-      ordering: state.ordering,
-      minPrice: state.minPrice,
-      maxPrice: state.maxPrice,
+      ordering:   state.ordering,
+      minPrice:   state.minPrice,
+      maxPrice:   state.maxPrice,
     );
     final result = await showFiltersSheet(
-      context: context,
+      context:       context,
       activeFilters: activeFilters,
-      categories: state.categories,
+      categories:    state.categories,
     );
     if (result != null && mounted) {
       ref.read(catalogProvider.notifier).setCategory(result.categoryId);
@@ -56,9 +56,18 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     }
   }
 
+  int _countActiveFilters(CatalogState state) {
+    int count = 0;
+    if (state.categoryId != null) count++;
+    if (state.ordering   != null) count++;
+    if (state.minPrice   != null) count++;
+    if (state.maxPrice   != null) count++;
+    return count;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(catalogProvider);
+    final state      = ref.watch(catalogProvider);
     final numFilters = _countActiveFilters(state);
 
     if (state.isLoading && state.products.isEmpty) {
@@ -66,6 +75,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
         child: CircularProgressIndicator(color: AppColors.accent),
       );
     }
+
     if (state.error != null && state.products.isEmpty) {
       return Center(
         child: Column(
@@ -77,7 +87,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => ref.read(catalogProvider.notifier).refresh(),
-              child: const Text('Retry'),
+              child: const Text('Reintentar'),
             ),
           ],
         ),
@@ -85,21 +95,22 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     }
 
     return RefreshIndicator(
-      color: AppColors.accent,
+      color:     AppColors.accent,
       onRefresh: ref.read(catalogProvider.notifier).refresh,
       child: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          // ── Search bar + filter button ─────────────
+          // ── Barra de búsqueda + botón filtros ─────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
               child: Row(
                 children: [
                   Expanded(
-                    child: SearchBar(
+                    child: AppSearchBar(
                       initialValue: state.search,
-                      onChanged: (q) => ref.read(catalogProvider.notifier).setSearch(q),
+                      onChanged:    (q) =>
+                          ref.read(catalogProvider.notifier).setSearch(q),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -118,15 +129,15 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                             side: const BorderSide(color: AppColors.border),
                           ),
                         ),
-                        icon: const Icon(Icons.tune),
+                        icon:      const Icon(Icons.tune),
                         onPressed: _openFilters,
                       ),
                       if (numFilters > 0)
                         Positioned(
-                          top: 4,
+                          top:   4,
                           right: 4,
                           child: Container(
-                            width: 16,
+                            width:  16,
                             height: 16,
                             decoration: const BoxDecoration(
                               color: AppColors.error,
@@ -136,8 +147,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                               child: Text(
                                 '$numFilters',
                                 style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
+                                  color:      Colors.white,
+                                  fontSize:   10,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -151,18 +162,18 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
             ),
           ),
 
-          // ── Results count ──────────────────────────────
+          // ── Contador de resultados ─────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                '${state.total} result${state.total != 1 ? 's' : ''}',
+                '${state.total} resultado${state.total != 1 ? 's' : ''}',
                 style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
               ),
             ),
           ),
 
-          // ── Grid ────────────────────────────────────────
+          // ── Grid ─────────────────────────────────────────
           if (state.products.isEmpty && !state.isLoading)
             const SliverFillRemaining(
               child: Center(
@@ -171,11 +182,14 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                   children: [
                     Text('📦', style: TextStyle(fontSize: 52)),
                     SizedBox(height: 16),
-                    Text('No results',
-                        style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
+                    Text(
+                      'Sin resultados',
+                      style: TextStyle(
+                        color:      AppColors.textPrimary,
+                        fontSize:   18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -185,8 +199,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
               padding: const EdgeInsets.all(16),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
+                  crossAxisCount:   2,
+                  mainAxisSpacing:  8,
                   crossAxisSpacing: 8,
                   childAspectRatio: 0.72,
                 ),
@@ -195,7 +209,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                     final p = state.products[i];
                     return ProductCard(
                       product: p,
-                      onTap: () => context.push('/catalog/${p.id}'),
+                      onTap:   () => context.push('/catalog/${p.id}'),
                     );
                   },
                   childCount: state.products.length,
@@ -203,7 +217,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
               ),
             ),
 
-          // ── Loading more spinner ────────────────────────
+          // ── Spinner de paginación ──────────────────────────
           if (state.isLoadingMore)
             const SliverToBoxAdapter(
               child: Padding(
@@ -213,18 +227,10 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                 ),
               ),
             ),
+
           const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
     );
-  }
-
-  int _countActiveFilters(CatalogState state) {
-    int count = 0;
-    if (state.categoryId != null) count++;
-    if (state.ordering != null) count++;
-    if (state.minPrice != null) count++;
-    if (state.maxPrice != null) count++;
-    return count;
   }
 }

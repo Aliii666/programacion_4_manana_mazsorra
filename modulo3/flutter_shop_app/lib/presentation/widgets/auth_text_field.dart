@@ -39,18 +39,18 @@ class _AuthTextFieldState extends State<AuthTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller:     widget.controller,
-      obscureText:    widget.isPassword && _obscure,
-      keyboardType:   widget.keyboardType,
-      textInputAction:widget.textInputAction,
-      enabled:        widget.enabled,
-      onChanged:      widget.onChanged,
-      validator:      widget.validator,
-      style:          const TextStyle(color: AppColors.textPrimary),
-      decoration:     InputDecoration(
-        labelText:  widget.label,
-        hintText:   widget.hint,
-        errorText:  widget.errorText,
+      controller:      widget.controller,
+      obscureText:     widget.isPassword && _obscure,
+      keyboardType:    widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      enabled:         widget.enabled,
+      onChanged:       widget.onChanged,
+      validator:       widget.validator,
+      style:           const TextStyle(color: AppColors.textPrimary),
+      decoration:      InputDecoration(
+        labelText: widget.label,
+        hintText:  widget.hint,
+        errorText: widget.errorText,
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(

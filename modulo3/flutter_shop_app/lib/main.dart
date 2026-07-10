@@ -19,10 +19,10 @@ class FlutterShopApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
-      title:                'Flutter Shop App',
+      title:                      'Flutter Shop App',
       debugShowCheckedModeBanner: false,
-      theme:                AppTheme.dark,
-      routerConfig:         router,
+      theme:                      AppTheme.dark,
+      routerConfig:               router,
     );
   }
 }

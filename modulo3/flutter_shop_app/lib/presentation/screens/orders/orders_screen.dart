@@ -58,7 +58,7 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen> {
             Container(
               color:   AppColors.surface,
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child:   Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -76,26 +76,28 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen> {
                       ),
                       IconButton(
                         onPressed: ref.read(ordersProvider.notifier).refresh,
-                        icon: const Icon(Icons.refresh_rounded, color: AppColors.textSecondary),
+                        icon: const Icon(Icons.refresh_rounded,
+                            color: AppColors.textSecondary),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
 
-                  // Filtros por estado
+                  // Chips de estado
                   SizedBox(
                     height: 34,
-                    child:  ListView(
-                      scrollDirection:  Axis.horizontal,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
                       children: _statusFilters.map((filter) {
                         final isSelected = state.statusFilter == filter.$1;
                         return Padding(
                           padding: const EdgeInsets.only(right: 8),
-                          child:   ChoiceChip(
+                          child: ChoiceChip(
                             label:     Text(filter.$2),
                             selected:  isSelected,
-                            onSelected:(_) =>
-                                ref.read(ordersProvider.notifier).setStatusFilter(filter.$1),
+                            onSelected: (_) => ref
+                                .read(ordersProvider.notifier)
+                                .setStatusFilter(filter.$1),
                           ),
                         );
                       }).toList(),
@@ -141,8 +143,8 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen> {
                         SizedBox(height: 16),
                         Text('Sin pedidos',
                             style: TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 18,
+                              color:      AppColors.textPrimary,
+                              fontSize:   18,
                               fontWeight: FontWeight.bold,
                             )),
                         Text('Tus pedidos aparecerán aquí',
@@ -152,28 +154,33 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen> {
                   );
                 }
 
-                return ListView.separated(
-                  controller:      _scrollCtrl,
-                  padding:         const EdgeInsets.all(16),
-                  itemCount:       state.orders.length + (state.isLoadingMore ? 1 : 0),
-                  separatorBuilder:(_, __) => const SizedBox(height: 12),
-                  itemBuilder: (_, i) {
-                    if (i >= state.orders.length) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child:   CircularProgressIndicator(
-                            color: AppColors.accent, strokeWidth: 2,
+                return RefreshIndicator(
+                  color:     AppColors.accent,
+                  onRefresh: () async =>
+                      ref.read(ordersProvider.notifier).refresh(),
+                  child: ListView.separated(
+                    controller:       _scrollCtrl,
+                    padding:          const EdgeInsets.all(16),
+                    itemCount:        state.orders.length +
+                        (state.isLoadingMore ? 1 : 0),
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    itemBuilder: (_, i) {
+                      if (i >= state.orders.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(
+                              color: AppColors.accent, strokeWidth: 2),
                           ),
-                        ),
+                        );
+                      }
+                      final order = state.orders[i];
+                      return _OrderCard(
+                        order: order,
+                        onTap: () => context.push('/orders/${order.id}'),
                       );
-                    }
-                    final order = state.orders[i];
-                    return _OrderCard(
-                      order:   order,
-                      onTap:   () => context.push('/orders/${order.id}'),
-                    );
-                  },
+                    },
+                  ),
                 );
               }),
             ),
@@ -208,9 +215,9 @@ class _OrderCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            // Cabecera
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:  MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
@@ -230,7 +237,7 @@ class _OrderCard extends StatelessWidget {
               spacing: 6, runSpacing: 4,
               children: [
                 ...order.items.take(3).map((item) => Container(
-                  padding:    const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color:        AppColors.surface2,
                     borderRadius: BorderRadius.circular(6),
@@ -238,14 +245,16 @@ class _OrderCard extends StatelessWidget {
                   ),
                   child: Text(
                     '${item.quantity}× ${item.productName}',
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+                    style: const TextStyle(
+                      color: AppColors.textSecondary, fontSize: 11),
                     maxLines: 1, overflow: TextOverflow.ellipsis,
                   ),
                 )),
                 if (order.items.length > 3)
                   Text(
                     '+${order.items.length - 3} más',
-                    style: const TextStyle(color: AppColors.textFaint, fontSize: 11),
+                    style: const TextStyle(
+                      color: AppColors.textFaint, fontSize: 11),
                   ),
               ],
             ),
@@ -253,7 +262,7 @@ class _OrderCard extends StatelessWidget {
             const Divider(height: 1),
             const SizedBox(height: 10),
 
-            // Footer
+            // Pie
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -266,11 +275,14 @@ class _OrderCard extends StatelessWidget {
                     Text(
                       formatPrice(order.total),
                       style: const TextStyle(
-                        color: AppColors.accent, fontSize: 16, fontWeight: FontWeight.bold,
+                        color:      AppColors.accent,
+                        fontSize:   16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Icon(Icons.chevron_right, color: AppColors.textFaint, size: 18),
+                    const Icon(Icons.chevron_right,
+                        color: AppColors.textFaint, size: 18),
                   ],
                 ),
               ],
